@@ -87,7 +87,7 @@ class UsersListWidget extends StatelessWidget {
           // color: Utils.ratingColor(userList[index].rating!).withOpacity(0.05),
 
           child: ListTile(
-            onTap: () {
+            onTap: () async {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => home(userList[index]),));
             },
             // contentPadding: EdgeInsets.all(10),
