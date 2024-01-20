@@ -2,6 +2,7 @@ import 'package:competitive_tracker/api/services.dart';
 import 'package:competitive_tracker/main.dart';
 import 'package:competitive_tracker/models/return_objects/user.dart';
 import 'package:competitive_tracker/ui/app_bar.dart';
+import 'package:competitive_tracker/ui/home_page/screens/home_screen.dart';
 import 'package:competitive_tracker/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +89,15 @@ class UsersListWidget extends StatelessWidget {
 
           child: ListTile(
             onTap: () async {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => home(userList[index]),));
+              // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+              // )
+              // );
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return Scaffold(
+                  appBar: MyAppBar(),
+                  body: userDetails(userList[index]),
+                );
+              },));
             },
             // contentPadding: EdgeInsets.all(10),
             leading: CircleAvatar(
@@ -283,143 +292,3 @@ class UserPopupWidget extends StatelessWidget {
     );
   }
 }
-
-Widget home(User user) => Scaffold(
-    appBar: const MyAppBar(),
-
-    body: ListView(
-      padding: const EdgeInsets.only(
-        top: 12,
-        left: 4,
-        right: 4,
-      ),
-      children: [
-        //Image
-        Center(
-          child: CircleAvatar(
-            radius: 75,
-            backgroundImage: NetworkImage(user.avatar!),
-          ),
-        ),
-    
-        //UserName
-        Text(
-          "${user.firstName.toString().capitalizeFirstLetter()} ${user.lastName.toString().capitalizeFirstLetter()}",
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 24,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
-    
-        //Card
-        Card(
-          color: AppColor.secondary,
-          margin: const EdgeInsets.only(top: 10, bottom: 10),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.handle.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
-                    color: AppColor.pupil,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Text(
-                      "Max\nRating",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                        color: AppColor.greyText,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 36,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user.maxRating.toString(),
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColor.specialist,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          user.maxRank!,
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColor.specialist,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Text(
-                      "Current\nRating",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                        color: AppColor.greyText,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user.rating.toString(),
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColor.pupil,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          user.rank!,
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColor.pupil,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-    
-        Container(
-          height: 500,
-          color: AppColor.secondary,
-        ),
-      ],
-    ),
-  );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../models/return_objects/user.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,148 +31,148 @@ class _HomeScreenState extends State<HomeScreen>
             snapshot.hasData &&
             snapshot.data != null &&
             snapshot.data!.isNotEmpty) {
-          return home(snapshot.data![0]);
+          return userDetails(snapshot.data![0]);
         } else {
           return const Center(child: Text("Please  Try Again"));
         }
       },
     );
   }
+}
+Widget userDetails(User user) => ListView(
+  padding: const EdgeInsets.only(
+    top: 12,
+    left: 4,
+    right: 4,
+  ),
+  children: [
+    //Image
+    Center(
+      child: CircleAvatar(
+        radius: 75,
+        backgroundImage: NetworkImage(user.avatar!),
+      ),
+    ),
 
-  Widget home(User user) => ListView(
-        padding: const EdgeInsets.only(
-          top: 12,
-          left: 4,
-          right: 4,
-        ),
-        children: [
-          //Image
-          Center(
-            child: CircleAvatar(
-              radius: 75,
-              backgroundImage: NetworkImage(user.avatar!),
-            ),
-          ),
+    //UserName
+    Text(
+      "${user.firstName.toString().capitalizeFirstLetter()} ${user.lastName.toString().capitalizeFirstLetter()}",
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 20,
+        fontStyle: FontStyle.italic,
+      ),
+    ),
 
-          //UserName
-          Text(
-            "${user.firstName.toString().capitalizeFirstLetter()} ${user.lastName.toString().capitalizeFirstLetter()}",
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-
-          //Card
-          Card(
-            elevation: 0,
-            color: AppColor.secondary,
-            margin: const EdgeInsets.only(top: 10, bottom: 10),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user.handle.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                      color: AppColor.pupil,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Text(
-                        "Max\nRating",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                          color: AppColor.greyText,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 36,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            user.maxRating.toString(),
-                            textAlign: TextAlign.start,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColor.specialist,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            user.maxRank!,
-                            textAlign: TextAlign.start,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColor.specialist,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Text(
-                        "Current\nRating",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                          color: AppColor.greyText,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            user.rating.toString(),
-                            textAlign: TextAlign.start,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColor.pupil,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            user.rank!,
-                            textAlign: TextAlign.start,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColor.pupil,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+    //Card
+    Card(
+      elevation: 0,
+      color: AppColor.secondary,
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              user.handle.toString(),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: AppColor.pupil,
               ),
             ),
-          ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text(
+                  "Max\nRating",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    color: AppColor.greyText,
+                  ),
+                ),
+                const SizedBox(
+                  width: 36,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.maxRating.toString(),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Utils.ratingColor(user.maxRating!),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      user.maxRank!,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Utils.ratingColor(user.maxRating!),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text(
+                  "Current\nRating",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    color: AppColor.greyText,
+                  ),
+                ),
+                const SizedBox(
+                  width: 30,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.rating.toString(),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Utils.ratingColor(user.rating!),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      user.rank!,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Utils.ratingColor(user.rating!),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
 
-          Container(
-            height: 500,
-            color: AppColor.secondary,
-          ),
-        ],
-      );
-}
+    Container(
+      height: 500,
+      color: AppColor.secondary,
+    ),
+  ],
+);
+

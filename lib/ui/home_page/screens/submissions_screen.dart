@@ -87,7 +87,7 @@ class SubmissionsListWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "${Utils.getDateStringFromEpochSeconds(submissionsList[index].creationTimeSeconds!)} | ${Utils.getTimeStringFromEpochSeconds(submissionsList[index].creationTimeSeconds!)}",
+                  "${Utils.getDateStringFromEpochSeconds(submissionsList[index].creationTimeSeconds!)}  ||  ${Utils.getTimeStringFromEpochSeconds(submissionsList[index].creationTimeSeconds!)}",
                   style: const TextStyle(
                     fontSize: 14,
                   ),

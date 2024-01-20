@@ -64,7 +64,7 @@ class Utils {
       month = "0$month";
     }
 
-    return "${dateTime.day}-${dateTime.month}-${dateTime.year}";
+    return "$day-$month-$year";
   }
 
   static String getTimeStringFromEpochSeconds(int epochTime){
