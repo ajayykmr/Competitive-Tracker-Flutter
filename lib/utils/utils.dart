@@ -52,6 +52,18 @@ class Utils {
 
   static String getDateStringFromEpochSeconds(int epochTime){
     DateTime dateTime = getDateTimeFromEpochSeconds(epochTime);
+
+    String day = dateTime.day.toString();
+    String month = dateTime.month.toString();
+    String year = dateTime.year.toString();
+
+    if (day.length==1) {
+      day = "0$day";
+    }
+    if (month.length==1){
+      month = "0$month";
+    }
+
     return "${dateTime.day}-${dateTime.month}-${dateTime.year}";
   }
 

@@ -47,16 +47,31 @@ class ContestListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+
       itemCount: contestList.length,
       itemBuilder: (context, index) {
+
+
         return Card(
-          color: AppColor.secondary,
+          color: Utils.getDateTimeFromEpochSeconds(contestList[index].startTimeSeconds!).isAfter(DateTime.now()) ? AppColor.secondary : AppColor.primary,
+          // color: AppColor.secondary,
           child: ListTile(
+            onTap: () {
+
+            },
             title: Text(
               contestList[index].name.toString(),
             ),
-            trailing: Text(
-              Utils.getDateTimeFromEpochSeconds(contestList[index].startTimeSeconds!).toString()
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  Utils.getDateStringFromEpochSeconds(contestList[index].startTimeSeconds!)
+                ),
+                Text(
+                  Utils.getTimeStringFromEpochSeconds(contestList[index].startTimeSeconds!),
+                )
+              ],
             ),
           ),
         );

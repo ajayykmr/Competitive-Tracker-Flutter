@@ -11,7 +11,7 @@ extension CapitalizedExtension on String {
   }
 }
 
-void main(){
+void main() {
   runApp(const MyApp());
 }
 
@@ -28,13 +28,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Competitive Tracker',
       theme: ThemeData(
-
         primaryColor: AppColor.primary,
         // colorSchemeSeed: AppColor.primary,
         colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primary),
         useMaterial3: true,
       ),
-      home: const HomePageScaffold()
+      home: const HomePageScaffold(),
     );
   }
 }
