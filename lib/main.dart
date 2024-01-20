@@ -1,5 +1,4 @@
 import 'package:competitive_tracker/ui/base_scaffold.dart';
-import 'package:competitive_tracker/ui/home_page/home_page_scaffold.dart';
 import 'package:competitive_tracker/utils/colors.dart';
 import 'package:flutter/material.dart';
 

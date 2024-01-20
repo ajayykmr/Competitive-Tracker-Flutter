@@ -1,6 +1,5 @@
 import 'package:competitive_tracker/ui/app_bar.dart';
 import 'package:competitive_tracker/ui/contests_page/screens/contests_list_screen.dart';
-import 'package:competitive_tracker/ui/drawer.dart';
 import 'package:competitive_tracker/ui/home_page/home_page_tab_bar.dart';
 import 'package:competitive_tracker/ui/leaderboard_page/screens/leaderboard_screen.dart';
 import 'package:competitive_tracker/ui/settings_page/screens/settings_screen.dart';
