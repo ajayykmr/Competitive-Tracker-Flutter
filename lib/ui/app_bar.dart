@@ -2,11 +2,19 @@ import 'package:competitive_tracker/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget{
-  const MyAppBar({super.key});
+class MyAppBar extends StatefulWidget implements PreferredSizeWidget{
+  final List<Widget>? actions;
+  const MyAppBar({this.actions, super.key});
 
   @override
   Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
+
+  @override
+  State<MyAppBar> createState() => _MyAppBarState();
+}
+
+class _MyAppBarState extends State<MyAppBar> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +25,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget{
       systemOverlayStyle: const SystemUiOverlayStyle(
         systemNavigationBarColor: AppColor.primary,
       ),
+      actions: widget.actions,
     );
   }
-
 }

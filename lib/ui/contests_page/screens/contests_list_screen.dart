@@ -1,5 +1,6 @@
 import 'package:competitive_tracker/api/services.dart';
 import 'package:competitive_tracker/models/return_objects/contest.dart';
+import 'package:competitive_tracker/ui/contest_details/contest_details_scaffold.dart';
 import 'package:competitive_tracker/utils/colors.dart';
 import 'package:competitive_tracker/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -46,36 +47,41 @@ class ContestListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, right: 4),
+      child: ListView.builder(
+        itemCount: contestList.length,
+        itemBuilder: (context, index) {
 
-      itemCount: contestList.length,
-      itemBuilder: (context, index) {
+          bool isContestUpcoming = Utils.getDateTimeFromEpochSeconds(contestList[index].startTimeSeconds!).isAfter(DateTime.now());
+          return Card(
 
-
-        return Card(
-          color: Utils.getDateTimeFromEpochSeconds(contestList[index].startTimeSeconds!).isAfter(DateTime.now()) ? AppColor.secondary : AppColor.primary,
-          // color: AppColor.secondary,
-          child: ListTile(
-            onTap: () {
-
-            },
-            title: Text(
-              contestList[index].name.toString(),
+            color: isContestUpcoming ? AppColor.secondary.withOpacity(0.75) : AppColor.secondary,
+            // color: AppColor.secondary,
+            child: ListTile(
+              onTap: () {
+                if (!isContestUpcoming){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ContestDetailsScaffold(contestList[index].id!),));
+                }
+              },
+              title: Text(
+                contestList[index].name.toString(),
+              ),
+              trailing: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    Utils.getDateStringFromEpochSeconds(contestList[index].startTimeSeconds!)
+                  ),
+                  Text(
+                    Utils.getTimeStringFromEpochSeconds(contestList[index].startTimeSeconds!),
+                  )
+                ],
+              ),
             ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  Utils.getDateStringFromEpochSeconds(contestList[index].startTimeSeconds!)
-                ),
-                Text(
-                  Utils.getTimeStringFromEpochSeconds(contestList[index].startTimeSeconds!),
-                )
-              ],
-            ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

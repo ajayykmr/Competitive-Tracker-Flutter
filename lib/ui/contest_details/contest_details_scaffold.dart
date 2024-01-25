@@ -1,27 +1,40 @@
 import 'package:competitive_tracker/api/services.dart';
 import 'package:competitive_tracker/models/contest_standings.dart';
 import 'package:competitive_tracker/ui/app_bar.dart';
-import 'package:competitive_tracker/ui/contest_details/screens/contest_user_submissions.dart';
 import 'package:competitive_tracker/ui/contest_details/screens/contest_problems_screen.dart';
 import 'package:competitive_tracker/ui/contest_details/screens/contest_standings_friends_screen.dart';
 import 'package:competitive_tracker/ui/contest_details/screens/contest_standings_screen.dart';
+import 'package:competitive_tracker/ui/contest_details/screens/contest_user_submissions.dart';
 import 'package:competitive_tracker/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class ContestDetailsScaffold extends StatelessWidget {
+class ContestDetailsScaffold extends StatefulWidget {
   final int contestId;
 
   const ContestDetailsScaffold(this.contestId, {super.key});
 
+  @override
+  State<ContestDetailsScaffold> createState() => _ContestDetailsScaffoldState();
+}
+
+class _ContestDetailsScaffoldState extends State<ContestDetailsScaffold> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         // backgroundColor: AppColor.secondary,
-        appBar: const MyAppBar(),
+        appBar: MyAppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() {});
+                },
+                icon: const Icon(Icons.refresh_rounded))
+          ],
+        ),
         body: FutureBuilder<ContestStandings?>(
-          future: ApiServices().getContestStandings(contestId),
+          future: ApiServices().getContestStandings(widget.contestId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
@@ -41,6 +54,7 @@ class ContestDetailsScaffold extends StatelessWidget {
         bottomNavigationBar: const Material(
           color: AppColor.primary,
           child: TabBar(
+            isScrollable: true,
             // automaticIndicatorColorAdjustment: true,
             tabs: [
               Tab(

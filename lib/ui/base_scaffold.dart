@@ -33,8 +33,14 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     });
   }
 
-  static List<IconData> homePageTabIcons = [Icons.home, Icons.people_rounded, Icons.bar_chart_rounded, Icons.menu_book_rounded];
-  static List<Tab> homePageTabs = List.generate(homePageTabIcons.length, (index) => Tab(icon: Icon(homePageTabIcons[index])));
+  static List<IconData> homePageTabIcons = [
+    Icons.home,
+    Icons.people_rounded,
+    Icons.bar_chart_rounded,
+    Icons.menu_book_rounded
+  ];
+  static List<Tab> homePageTabs = List.generate(homePageTabIcons.length,
+      (index) => Tab(icon: Icon(homePageTabIcons[index])));
 
   static List<List<Tab>> tabs = [homePageTabs, [], [], []];
 
