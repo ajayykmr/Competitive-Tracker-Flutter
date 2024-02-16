@@ -1,7 +1,8 @@
 import 'package:competitive_tracker/api/services.dart';
 import 'package:competitive_tracker/main.dart';
+import 'package:competitive_tracker/models/return_objects/rating_changes.dart';
+import 'package:competitive_tracker/ui/home_page/line_chart.dart';
 import 'package:flutter/material.dart';
-
 import '../../../models/return_objects/user.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/constants.dart';
@@ -169,9 +170,29 @@ Widget userDetails(User user) => ListView(
       ),
     ),
 
-    Container(
-      height: 500,
+    Card(
       color: AppColor.secondary,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+        child: SizedBox(
+          height: 500,
+          // color: AppColor.greyText,
+          child: FutureBuilder<List<RatingChanges>?>(
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                return RatingLineChart(ratingChanges: snapshot.data!);
+              } else {
+                const Text("Please Try Again");
+              }
+
+              return const Text("PLease Try Again");
+            },
+            future: ApiServices().getUserRatingHistory(Constants.userID),
+          ),
+        ),
+      ),
     ),
   ],
 );
