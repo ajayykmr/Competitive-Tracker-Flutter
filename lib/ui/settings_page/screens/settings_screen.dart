@@ -1,4 +1,4 @@
-import 'package:competitive_tracker/utils/colors.dart';
+import 'package:cflytics/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {

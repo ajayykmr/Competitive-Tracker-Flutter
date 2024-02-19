@@ -1,5 +1,5 @@
-import 'package:competitive_tracker/models/return_objects/author.dart';
-import 'package:competitive_tracker/models/return_objects/problem.dart';
+import 'package:cflytics/models/return_objects/author.dart';
+import 'package:cflytics/models/return_objects/problem.dart';
 
 class Submission {
   int? id;

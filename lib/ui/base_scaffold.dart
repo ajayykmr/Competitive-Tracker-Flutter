@@ -1,9 +1,9 @@
-import 'package:competitive_tracker/ui/app_bar.dart';
-import 'package:competitive_tracker/ui/contests_page/screens/contests_list_screen.dart';
-import 'package:competitive_tracker/ui/home_page/home_page_tab_bar.dart';
-import 'package:competitive_tracker/ui/leaderboard_page/screens/leaderboard_screen.dart';
-import 'package:competitive_tracker/ui/settings_page/screens/settings_screen.dart';
-import 'package:competitive_tracker/utils/colors.dart';
+import 'package:cflytics/ui/app_bar.dart';
+import 'package:cflytics/ui/contests_page/screens/contests_list_screen.dart';
+import 'package:cflytics/ui/home_page/home_page_tab_bar.dart';
+import 'package:cflytics/ui/leaderboard_page/screens/leaderboard_screen.dart';
+import 'package:cflytics/ui/settings_page/screens/settings_screen.dart';
+import 'package:cflytics/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class BaseScaffold extends StatefulWidget {
@@ -107,7 +107,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                     height: 10,
                   ),
                   const Text(
-                    "Competitive Tracker",
+                    "CFlytics",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,

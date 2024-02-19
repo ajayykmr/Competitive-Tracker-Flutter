@@ -1,19 +1,20 @@
 import 'dart:convert';
-import 'package:competitive_tracker/models/contest_standings.dart';
-import 'package:competitive_tracker/models/return_objects/user.dart';
-import 'package:competitive_tracker/models/user_contest_submissions.dart';
-import 'package:competitive_tracker/models/users_info.dart';
-import 'package:competitive_tracker/utils/constants.dart';
+import 'package:cflytics/models/contest_list.dart';
+import 'package:cflytics/models/contest_standings.dart';
+import 'package:cflytics/models/return_objects/contest.dart';
+import 'package:cflytics/models/return_objects/rating_changes.dart';
+import 'package:cflytics/models/return_objects/submission.dart';
+import 'package:cflytics/models/return_objects/user.dart';
+import 'package:cflytics/models/user_all_submissions.dart';
+import 'package:cflytics/models/user_contest_submissions.dart';
+import 'package:cflytics/models/user_friends_list.dart';
+import 'package:cflytics/models/user_rating_history.dart';
+import 'package:cflytics/models/users_info.dart';
+import 'package:cflytics/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 
-import 'package:competitive_tracker/models/contest_list.dart';
-import 'package:competitive_tracker/models/return_objects/contest.dart';
-import 'package:competitive_tracker/models/return_objects/rating_changes.dart';
-import 'package:competitive_tracker/models/return_objects/submission.dart';
-import 'package:competitive_tracker/models/user_all_submissions.dart';
-import 'package:competitive_tracker/models/user_friends_list.dart';
-import 'package:competitive_tracker/models/user_rating_history.dart';
+
 
 class ApiServices {
   static const baseURL = "https://codeforces.com/api/";

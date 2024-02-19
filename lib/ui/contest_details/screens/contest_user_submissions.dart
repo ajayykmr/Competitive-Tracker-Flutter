@@ -1,9 +1,9 @@
-import 'package:competitive_tracker/api/services.dart';
-import 'package:competitive_tracker/models/contest_standings.dart';
-import 'package:competitive_tracker/models/return_objects/submission.dart';
-import 'package:competitive_tracker/utils/colors.dart';
-import 'package:competitive_tracker/utils/constants.dart';
-import 'package:competitive_tracker/utils/utils.dart';
+import 'package:cflytics/api/services.dart';
+import 'package:cflytics/models/contest_standings.dart';
+import 'package:cflytics/models/return_objects/submission.dart';
+import 'package:cflytics/utils/colors.dart';
+import 'package:cflytics/utils/constants.dart';
+import 'package:cflytics/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ContestUserSubissionsScreen extends StatefulWidget {

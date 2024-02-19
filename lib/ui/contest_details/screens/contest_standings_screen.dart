@@ -1,8 +1,8 @@
-import 'package:competitive_tracker/models/contest_standings.dart';
-import 'package:competitive_tracker/ui/contest_details/screens/contest_user_submissions.dart';
-import 'package:competitive_tracker/utils/colors.dart';
-import 'package:competitive_tracker/utils/constants.dart';
-import 'package:competitive_tracker/utils/utils.dart';
+import 'package:cflytics/models/contest_standings.dart';
+import 'package:cflytics/ui/contest_details/screens/contest_user_submissions.dart';
+import 'package:cflytics/utils/colors.dart';
+import 'package:cflytics/utils/constants.dart';
+import 'package:cflytics/utils/utils.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 

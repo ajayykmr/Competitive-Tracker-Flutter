@@ -1,6 +1,6 @@
-import 'package:competitive_tracker/api/services.dart';
-import 'package:competitive_tracker/models/contest_standings.dart';
-import 'package:competitive_tracker/ui/contest_details/screens/contest_standings_screen.dart';
+import 'package:cflytics/api/services.dart';
+import 'package:cflytics/models/contest_standings.dart';
+import 'package:cflytics/ui/contest_details/screens/contest_standings_screen.dart';
 import 'package:flutter/material.dart';
 
 class ContestStandingsFriendsScreen extends StatefulWidget {

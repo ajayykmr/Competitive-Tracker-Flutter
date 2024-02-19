@@ -1,6 +1,6 @@
-import 'package:competitive_tracker/api/services.dart';
-import 'package:competitive_tracker/models/return_objects/user.dart';
-import 'package:competitive_tracker/ui/home_page/screens/friends_list_screen.dart';
+import 'package:cflytics/api/services.dart';
+import 'package:cflytics/models/return_objects/user.dart';
+import 'package:cflytics/ui/home_page/screens/friends_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class LeaderBoardScreen extends StatelessWidget {

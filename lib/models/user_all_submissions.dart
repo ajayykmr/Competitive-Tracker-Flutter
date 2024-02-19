@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:competitive_tracker/models/return_objects/submission.dart';
+import 'package:cflytics/models/return_objects/submission.dart';
 
 UserAllSubmissionsHistory userAllSubmissionsHistoryFromJson(String str) => UserAllSubmissionsHistory.fromJson(json.decode(str));
 

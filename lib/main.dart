@@ -1,6 +1,7 @@
-import 'package:competitive_tracker/ui/base_scaffold.dart';
-import 'package:competitive_tracker/utils/colors.dart';
 import 'package:flutter/material.dart';
+
+import 'ui/base_scaffold.dart';
+import 'utils/colors.dart';
 
 extension CapitalizedExtension on String {
   String capitalizeFirstLetter() {

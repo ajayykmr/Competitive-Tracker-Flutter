@@ -7,5 +7,6 @@ class Constants {
   static String apiKey= "";
   static String apiSECRET ="";
 
+  static String noPhotoUrl = "https://userpic.codeforces.org/no-avatar.jpg";
 
 }

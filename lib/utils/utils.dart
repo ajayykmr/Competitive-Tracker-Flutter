@@ -1,6 +1,6 @@
-import 'package:competitive_tracker/models/return_objects/problem.dart';
-import 'package:competitive_tracker/models/return_objects/submission.dart';
-import 'package:competitive_tracker/utils/colors.dart';
+import 'package:cflytics/models/return_objects/problem.dart';
+import 'package:cflytics/models/return_objects/submission.dart';
+import 'package:cflytics/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -9,6 +9,35 @@ class Utils {
 
   static String capitalizeFirstLetterFunction(String s) => s[0].toUpperCase() + s.substring(1);
 
+  static String monthFromInteger(int month){
+
+    switch(month){
+      case 1:
+        return "Jan";
+      case 2:
+        return "Feb";
+      case 3:
+        return "Mar";
+      case 4:
+        return "Apr";
+      case 5:
+        return "May";
+      case 6:
+        return "Jun";
+      case 7:
+        return "Jul";
+      case 8:
+        return "Aug";
+      case 9:
+        return "Sep";
+      case 10:
+        return "Oct";
+      case 11:
+        return "Nov";
+      case _:
+        return "Dec";
+    }
+  }
   static Color ratingColor(int rating)
   {
     switch(rating){

@@ -1,9 +1,9 @@
-import 'package:competitive_tracker/api/services.dart';
-import 'package:competitive_tracker/main.dart';
-import 'package:competitive_tracker/models/return_objects/user.dart';
-import 'package:competitive_tracker/ui/app_bar.dart';
-import 'package:competitive_tracker/ui/home_page/screens/home_screen.dart';
-import 'package:competitive_tracker/utils/constants.dart';
+import 'package:cflytics/api/services.dart';
+import 'package:cflytics/main.dart';
+import 'package:cflytics/models/return_objects/user.dart';
+import 'package:cflytics/ui/app_bar.dart';
+import 'package:cflytics/ui/home_page/screens/home_screen.dart';
+import 'package:cflytics/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/colors.dart';

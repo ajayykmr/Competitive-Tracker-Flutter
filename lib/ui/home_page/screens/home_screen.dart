@@ -1,7 +1,7 @@
-import 'package:competitive_tracker/api/services.dart';
-import 'package:competitive_tracker/main.dart';
-import 'package:competitive_tracker/models/return_objects/rating_changes.dart';
-import 'package:competitive_tracker/ui/home_page/line_chart.dart';
+import 'package:cflytics/api/services.dart';
+import 'package:cflytics/main.dart';
+import 'package:cflytics/models/return_objects/rating_changes.dart';
+import 'package:cflytics/ui/home_page/line_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../models/return_objects/user.dart';
 import '../../../utils/colors.dart';
@@ -51,7 +51,7 @@ Widget userDetails(User user) => ListView(
     Center(
       child: CircleAvatar(
         radius: 75,
-        backgroundImage: NetworkImage(user.avatar!),
+        backgroundImage: NetworkImage(user.titlePhoto!),
       ),
     ),
 
@@ -173,7 +173,7 @@ Widget userDetails(User user) => ListView(
     Card(
       color: AppColor.secondary,
       child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+        padding: const EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 20),
         child: SizedBox(
           height: 500,
           // color: AppColor.greyText,
@@ -189,7 +189,7 @@ Widget userDetails(User user) => ListView(
 
               return const Text("PLease Try Again");
             },
-            future: ApiServices().getUserRatingHistory(Constants.userID),
+            future: ApiServices().getUserRatingHistory(user.handle!),
           ),
         ),
       ),

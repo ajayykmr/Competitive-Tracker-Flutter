@@ -1,4 +1,4 @@
-import 'package:competitive_tracker/models/return_objects/member.dart';
+import 'package:cflytics/models/return_objects/member.dart';
 
 class Author {
   int? contestId;

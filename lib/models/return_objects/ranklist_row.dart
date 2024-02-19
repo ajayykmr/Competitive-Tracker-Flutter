@@ -1,6 +1,6 @@
 
-import 'package:competitive_tracker/models/return_objects/party.dart';
-import 'package:competitive_tracker/models/return_objects/problem_result.dart';
+import 'package:cflytics/models/return_objects/party.dart';
+import 'package:cflytics/models/return_objects/problem_result.dart';
 
 class RanklistRow {
   Party? party;

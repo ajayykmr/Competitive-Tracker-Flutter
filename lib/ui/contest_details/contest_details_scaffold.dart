@@ -1,11 +1,11 @@
-import 'package:competitive_tracker/api/services.dart';
-import 'package:competitive_tracker/models/contest_standings.dart';
-import 'package:competitive_tracker/ui/app_bar.dart';
-import 'package:competitive_tracker/ui/contest_details/screens/contest_problems_screen.dart';
-import 'package:competitive_tracker/ui/contest_details/screens/contest_standings_friends_screen.dart';
-import 'package:competitive_tracker/ui/contest_details/screens/contest_standings_screen.dart';
-import 'package:competitive_tracker/ui/contest_details/screens/contest_user_submissions.dart';
-import 'package:competitive_tracker/utils/colors.dart';
+import 'package:cflytics/api/services.dart';
+import 'package:cflytics/models/contest_standings.dart';
+import 'package:cflytics/ui/app_bar.dart';
+import 'package:cflytics/ui/contest_details/screens/contest_problems_screen.dart';
+import 'package:cflytics/ui/contest_details/screens/contest_standings_friends_screen.dart';
+import 'package:cflytics/ui/contest_details/screens/contest_standings_screen.dart';
+import 'package:cflytics/ui/contest_details/screens/contest_user_submissions.dart';
+import 'package:cflytics/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class ContestDetailsScaffold extends StatefulWidget {

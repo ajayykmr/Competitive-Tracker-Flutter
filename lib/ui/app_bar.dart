@@ -1,4 +1,4 @@
-import 'package:competitive_tracker/utils/colors.dart';
+import 'package:cflytics/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,7 +19,7 @@ class _MyAppBarState extends State<MyAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text("Competitive Tracker"),
+      title: const Text("CFlytics"),
       backgroundColor: AppColor.primary,
       elevation: 0,
       systemOverlayStyle: const SystemUiOverlayStyle(

@@ -4,9 +4,9 @@
 
 import 'dart:convert';
 
-import 'package:competitive_tracker/models/return_objects/contest.dart';
-import 'package:competitive_tracker/models/return_objects/problem.dart';
-import 'package:competitive_tracker/models/return_objects/ranklist_row.dart';
+import 'package:cflytics/models/return_objects/contest.dart';
+import 'package:cflytics/models/return_objects/problem.dart';
+import 'package:cflytics/models/return_objects/ranklist_row.dart';
 
 ContestStandings contestStandingsFromJson(String str) => ContestStandings.fromJson(json.decode(str));
 

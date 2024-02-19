@@ -1,5 +1,5 @@
-import 'package:competitive_tracker/models/contest_standings.dart';
-import 'package:competitive_tracker/utils/utils.dart';
+import 'package:cflytics/models/contest_standings.dart';
+import 'package:cflytics/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ContestProblemsScreen extends StatefulWidget {

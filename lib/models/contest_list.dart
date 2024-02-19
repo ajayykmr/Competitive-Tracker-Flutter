@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:competitive_tracker/models/return_objects/contest.dart';
+import 'package:cflytics/models/return_objects/contest.dart';
 
 ContestList contestListFromJson(String str) => ContestList.fromJson(json.decode(str));
 
