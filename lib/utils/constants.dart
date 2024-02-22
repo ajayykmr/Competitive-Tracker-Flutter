@@ -4,9 +4,9 @@ class Constants {
   static const double pageTitleSize = 24;
 
   static String userID = "qubitt";
-  static String handleKey = "qubitt";
-  static String apiKeyKey= "";
-  static String apiSecretKey ="";
+  static String handleKey = "handle";
+  static String apiKeyKey= "apiKey";
+  static String apiSecretKey ="apiSecret";
 
   static String noPhotoUrl = "https://userpic.codeforces.org/no-avatar.jpg";
 

@@ -32,11 +32,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 
 class SettingsWidget extends StatefulWidget {
-  String? handle;
-  String? apiKey;
-  String? apiSecret;
+  final String? handle;
+  final String? apiKey;
+  final String? apiSecret;
 
-  SettingsWidget({
+  const SettingsWidget({
     this.handle,
     this.apiKey,
     this.apiSecret,
@@ -110,8 +110,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ),
           Center(
             child: TextButton(
-              onPressed: () async {
-
+              onPressed: () {
                 saveSettings(handleController.text, apiKeyController.text, apiSecretController.text);
               },
               style: const ButtonStyle(
@@ -131,7 +130,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     await storage.write(key: Constants.apiSecretKey, value: apiSecret);
 
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Done")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Done")));
     }
   }
 }
