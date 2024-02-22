@@ -1,6 +1,10 @@
 import 'package:cflytics/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../utils/constants.dart';
+
+const storage = FlutterSecureStorage();
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -9,12 +13,48 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  TextEditingController userID = TextEditingController(),
-      apiKEY = TextEditingController(),
-      apiSECRET = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: storage.readAll(),
+      builder: (context, snapshot) {
+        String? handle = snapshot.data?[Constants.handleKey];
+        String? apiKey = snapshot.data?[Constants.apiKeyKey];
+        String? apiSecret = snapshot.data?[Constants.apiSecretKey];
+
+        return SettingsWidget(
+            handle: handle, apiKey: apiKey, apiSecret: apiSecret);
+      },
+    );
+  }
+}
+
+class SettingsWidget extends StatefulWidget {
+  String? handle;
+  String? apiKey;
+  String? apiSecret;
+
+  SettingsWidget({
+    this.handle,
+    this.apiKey,
+    this.apiSecret,
+    super.key,
+  });
+
+  @override
+  State<SettingsWidget> createState() => _SettingsWidgetState();
+}
+
+class _SettingsWidgetState extends State<SettingsWidget> {
+  @override
+  Widget build(BuildContext context) {
+
+    TextEditingController handleController = TextEditingController(text: widget.handle),
+        apiKeyController = TextEditingController(text: widget.apiKey),
+        apiSecretController = TextEditingController(text: widget.apiSecret);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -22,56 +62,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           const Text(
             "Your handle:",
-            style: TextStyle(
-              fontSize: 18
-            ),
+            style: TextStyle(fontSize: 18),
           ),
           TextField(
-            controller: userID,
+            controller: handleController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'tourist',
+              hintText: 'Please enter your handle',
             ),
-            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+            onTapOutside: (event) =>
+                FocusManager.instance.primaryFocus?.unfocus(),
           ),
-          const SizedBox(height: 10,),
-
+          const SizedBox(
+            height: 10,
+          ),
           const Text(
             "API KEY:",
-            style: TextStyle(
-                fontSize: 18
-            ),
+            style: TextStyle(fontSize: 18),
           ),
           TextField(
-            controller: userID,
+            controller: apiKeyController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              hintText: '0x0000000000000000',
+              hintText: 'Please enter your apiKey',
             ),
-            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+            onTapOutside: (event) =>
+                FocusManager.instance.primaryFocus?.unfocus(),
           ),
-          const SizedBox(height: 10,),
-
+          const SizedBox(
+            height: 10,
+          ),
           const Text(
             "API SECRET:",
-            style: TextStyle(
-                fontSize: 18
-            ),
+            style: TextStyle(fontSize: 18),
           ),
           TextField(
-            controller: userID,
+            controller: apiSecretController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              hintText: '0x0000000000000000',
+              hintText: 'Please enter your apiSecret',
             ),
-            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+            onTapOutside: (event) =>
+                FocusManager.instance.primaryFocus?.unfocus(),
           ),
-          const SizedBox(height: 10,),
-
+          const SizedBox(
+            height: 10,
+          ),
           Center(
             child: TextButton(
-              onPressed: () {  },
+              onPressed: () async {
 
+                saveSettings(handleController.text, apiKeyController.text, apiSecretController.text);
+              },
               style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(AppColor.primary),
                 foregroundColor: MaterialStatePropertyAll(AppColor.secondary),
@@ -82,5 +124,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+  void saveSettings(String? handle, String? apiKey, String? apiSecret) async {
+    await storage.write(key: Constants.handleKey, value: handle);
+    await storage.write(key: Constants.apiKeyKey, value: apiKey);
+    await storage.write(key: Constants.apiSecretKey, value: apiSecret);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Done")));
+    }
   }
 }
