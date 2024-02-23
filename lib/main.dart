@@ -12,6 +12,7 @@ extension CapitalizedExtension on String {
   }
 }
 
+//codemagic automatic build test
 void main() {
   runApp(const MyApp());
 }
