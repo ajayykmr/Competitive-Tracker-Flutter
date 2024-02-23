@@ -10,7 +10,6 @@ import 'package:cflytics/models/user_contest_submissions.dart';
 import 'package:cflytics/models/user_friends_list.dart';
 import 'package:cflytics/models/user_rating_history.dart';
 import 'package:cflytics/models/users_info.dart';
-import 'package:cflytics/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 
@@ -21,7 +20,8 @@ class ApiServices {
 
   //https://codeforces.com/api/user.info?handles=qubitt;princemishra01;
   Future<List<User>?> getUsers(List<String> handles) async {
-    var url = "${baseURL}user.info?handles=${Constants.userID};";
+    //handles[0] = my handle
+    var url = "${baseURL}user.info?handles=${handles[0]};";
     final sb = StringBuffer();
     sb.writeAll(handles, ';');
     url = "$url${sb.toString()}";
@@ -74,9 +74,8 @@ class ApiServices {
     return null;
   }
 
-  Future<List<User>?> getFriendsList(String handle) async {
-    String apiKey = "c155bc899e8711c9db4c0df97b2c7ce684ba1658";
-    String apiSecret = "030ed83c4bfe965728e4cedc068a5c16439fb39c";
+  Future<List<User>?> getFriendsList(String handle, String apiKey, String apiSecret) async {
+
 
     String unixTime = (DateTime.now().millisecondsSinceEpoch~/1000).toString();
     int random = 123456;
@@ -142,10 +141,7 @@ class ApiServices {
   }
 
   //https://codeforces.com/api/contest.standings?contestId=1877&asManager=false&from=1&count=5&showUnofficial=true&handles=qubitt;princemishra01
-  Future<ContestStandings?> getContestStandingsFriends(int contestID) async {
-
-    String apiKey = "c155bc899e8711c9db4c0df97b2c7ce684ba1658";
-    String apiSecret = "030ed83c4bfe965728e4cedc068a5c16439fb39c";
+  Future<ContestStandings?> getContestStandingsFriends(String myHandle, String apiKey, String apiSecret, int contestID) async {
 
     String unixTime = (DateTime.now().millisecondsSinceEpoch~/1000).toString();
     int random = 123456;
@@ -164,7 +160,7 @@ class ApiServices {
     if (response.statusCode==200){
       List<String> handles = userFriendsListFromJson(response.body).result!;
       if (handles.isNotEmpty){
-        var url2 ="${baseURL}contest.standings?contestId=$contestID&asManager=false&showUnofficial=true&handles=${Constants.userID};";
+        var url2 ="${baseURL}contest.standings?contestId=$contestID&asManager=false&showUnofficial=true&handles=${myHandle};";
 
         final sb = StringBuffer();
         sb.writeAll(handles, ';');

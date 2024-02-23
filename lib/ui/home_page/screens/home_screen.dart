@@ -5,11 +5,11 @@ import 'package:cflytics/ui/home_page/line_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../models/return_objects/user.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String handle;
+  const HomeScreen(this.handle, {super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return FutureBuilder<List<User>?>(
-      future: ApiServices().getUsers([Constants.userID]),
+      future: ApiServices().getUsers([widget.handle]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen>
             snapshot.data!.isNotEmpty) {
           return userDetails(snapshot.data![0]);
         } else {
-          return const Center(child: Text("Please  Try Again"));
+          return const Center(child: Text("Please Try Again"));
         }
       },
     );

@@ -3,14 +3,14 @@ import 'package:cflytics/main.dart';
 import 'package:cflytics/models/return_objects/user.dart';
 import 'package:cflytics/ui/app_bar.dart';
 import 'package:cflytics/ui/home_page/screens/home_screen.dart';
-import 'package:cflytics/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/colors.dart';
 import '../../../utils/utils.dart';
 
 class FriendsListScreen extends StatefulWidget {
-  const FriendsListScreen({super.key});
+  final String handle, apiKey, apiSecret;
+  const FriendsListScreen(this.handle, this.apiKey, this.apiSecret, {super.key});
 
   @override
   State<FriendsListScreen> createState() => _FriendsListScreenState();
@@ -39,7 +39,7 @@ class _FriendsListScreenState extends State<FriendsListScreen>
         // ),
         Expanded(
             child: FutureBuilder<List<User>?>(
-          future: ApiServices().getFriendsList(Constants.userID),
+          future: ApiServices().getFriendsList(widget.handle, widget.apiKey, widget.apiSecret),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -50,10 +50,8 @@ class _FriendsListScreenState extends State<FriendsListScreen>
               sortedFriendsList.sort((a, b) => b.rating!.compareTo(a.rating!));
               return UsersListWidget(sortedFriendsList);
             } else {
-              const Text("Please Try Again");
+              return Center(child: const Text("Please Try Again\nAlso, please ensure that you entered the correct API keys\n"));
             }
-
-            return const Text("PLease Try Again");
           },
         )),
       ],

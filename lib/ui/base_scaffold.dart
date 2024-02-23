@@ -4,6 +4,7 @@ import 'package:cflytics/ui/home_page/home_page_tab_bar.dart';
 import 'package:cflytics/ui/leaderboard_page/screens/leaderboard_screen.dart';
 import 'package:cflytics/ui/settings_page/screens/settings_screen.dart';
 import 'package:cflytics/utils/colors.dart';
+import 'package:cflytics/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class BaseScaffold extends StatefulWidget {
@@ -74,50 +75,36 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                   SizedBox(
                     height: MediaQuery.of(context).viewPadding.top,
                   ),
-                  const Row(
+                  Row(
                     children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white,
+                      Image.asset(
+                        Constants.drawerLogo,
+                        height: 75,
+                        width: 75,
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(10.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Ajay Kumar",
+                              "CFlytics",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              "qubitt",
+                              "by Ajay",
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
+                                fontStyle: FontStyle.italic,
                               ),
                             ),
                           ],
                         ),
                       )
                     ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "CFlytics",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const Text(
-                    "by Ajay",
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
                   ),
                 ],
               ),

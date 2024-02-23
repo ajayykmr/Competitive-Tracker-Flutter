@@ -1,10 +1,12 @@
 import 'package:cflytics/models/contest_standings.dart';
 import 'package:cflytics/ui/contest_details/screens/contest_user_submissions.dart';
 import 'package:cflytics/utils/colors.dart';
-import 'package:cflytics/utils/constants.dart';
 import 'package:cflytics/utils/utils.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+const storage = FlutterSecureStorage();
 
 class ContestStandingsScreen extends StatefulWidget {
   final ContestStandings contestStandings;
@@ -19,6 +21,20 @@ class _ContestStandingsScreenState extends State<ContestStandingsScreen>
     with AutomaticKeepAliveClientMixin<ContestStandingsScreen> {
   @override
   bool get wantKeepAlive => true;
+
+  late final Map<String, String> _values;
+  late final String? myHandle;
+  @override
+  void initState() {
+    super.initState();
+    _fetchValues();
+  }
+
+  Future<void> _fetchValues() async {
+    _values = await storage.readAll();
+    myHandle = _values['handle'];
+    if (context.mounted) {setState(() {});}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +57,8 @@ class StandingsTable extends StatelessWidget {
 
   final ContestStandings contestStandings;
   late final int numberOfProblems;
-
-  StandingsTable(this.contestStandings, {super.key}) {
+  final String? myHandle;
+  StandingsTable(this.contestStandings, {this.myHandle, super.key}) {
     numberOfProblems = contestStandings.result!.problems!.length;
   }
 
@@ -146,8 +162,8 @@ class StandingsTable extends StatelessWidget {
                     minChildSize: 0.1,
                     maxChildSize:  0.95,
                     expand: false,
-                    builder: (context, scrollController) =>  ContestUserSubissionsScreen(contestStandings,
-                        handle: contestStandings
+                    builder: (context, scrollController) =>  ContestUserSubmissionsScreen(contestStandings,
+                        givenHandle: contestStandings
                             .result!.rows![INDEX].party!.members![0].handle, scrollController: scrollController,),
                   ),
                 );
@@ -178,9 +194,9 @@ class StandingsTable extends StatelessWidget {
         "${INDEX + 1}. $handle",
         style: TextStyle(
           fontWeight:
-              (handle == Constants.userID) ? FontWeight.w800 : FontWeight.w500,
+              (handle == myHandle) ? FontWeight.w800 : FontWeight.w500,
           decoration:
-              (handle == Constants.userID) ? TextDecoration.underline : null,
+              (handle == myHandle) ? TextDecoration.underline : null,
         ),
       ));
     } else {
@@ -188,11 +204,11 @@ class StandingsTable extends StatelessWidget {
         Text(
           "* ${contestStandings.result!.rows![INDEX].party!.members![0].handle!}",
           style: TextStyle(
-            fontWeight: (handle == Constants.userID)
+            fontWeight: (handle == myHandle)
                 ? FontWeight.w400
                 : FontWeight.normal,
             decoration:
-                (handle == Constants.userID) ? TextDecoration.underline : null,
+                (handle == myHandle) ? TextDecoration.underline : null,
           ),
         ),
       );

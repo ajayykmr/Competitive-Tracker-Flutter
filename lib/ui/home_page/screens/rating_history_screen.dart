@@ -8,7 +8,8 @@ import '../../../utils/colors.dart';
 import '../../../utils/constants.dart';
 
 class RatingHistoryScreen extends StatefulWidget {
-  const RatingHistoryScreen({super.key});
+  String handle;
+  RatingHistoryScreen(this.handle, {super.key});
 
   @override
   State<RatingHistoryScreen> createState() => _RatingHistoryScreenState();
@@ -46,7 +47,7 @@ class _RatingHistoryScreenState extends State<RatingHistoryScreen>
 
               return const Text("PLease Try Again");
             },
-            future: ApiServices().getUserRatingHistory(Constants.userID),
+            future: ApiServices().getUserRatingHistory(widget.handle),
           ),
         ),
       ],

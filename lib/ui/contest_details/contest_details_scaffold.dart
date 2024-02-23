@@ -58,19 +58,20 @@ class _ContestDetailsScaffoldState extends State<ContestDetailsScaffold> {
             // automaticIndicatorColorAdjustment: true,
             tabs: [
               Tab(
-                // icon: Icon(Icons.list_alt_rounded),
+                icon: Icon(Icons.list_alt_rounded),
                 text: "Problems",
               ),
               Tab(
-                // icon: Icon(Icons.table_rows_rounded),
-                text: "Common\nStandings",
+                icon: Icon(Icons.table_rows_outlined),
+                text: "Common Standings",
               ),
               Tab(
-                // icon: Icon(Icons.table_rows_rounded),
-                text: "Friends\nStandings",
+                icon: Icon(Icons.table_rows_rounded),
+                text: "Friends Standings",
               ),
               Tab(
-                text: "My\nSubmissions",
+                icon: Icon(Icons.menu_book_rounded),
+                text: "My Submissions",
               ),
             ],
 
@@ -104,7 +105,7 @@ class ContestDetailsTabBarViewWidget extends StatelessWidget {
         ContestProblemsScreen(contestStandings),
         ContestStandingsScreen(contestStandings),
         ContestStandingsFriendsScreen(contestStandings),
-        ContestUserSubissionsScreen(contestStandings),
+        ContestUserSubmissionsScreen(contestStandings),
       ],
     );
   }

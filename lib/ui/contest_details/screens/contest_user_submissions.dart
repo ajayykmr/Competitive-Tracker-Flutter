@@ -2,38 +2,55 @@ import 'package:cflytics/api/services.dart';
 import 'package:cflytics/models/contest_standings.dart';
 import 'package:cflytics/models/return_objects/submission.dart';
 import 'package:cflytics/utils/colors.dart';
-import 'package:cflytics/utils/constants.dart';
 import 'package:cflytics/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class ContestUserSubissionsScreen extends StatefulWidget {
+const storage = FlutterSecureStorage();
+class ContestUserSubmissionsScreen extends StatefulWidget {
   final ContestStandings contestStandings;
-  late final String userID;
   late final ScrollController? scrollController;
+  String? givenHandle;
+  ContestUserSubmissionsScreen(this.contestStandings,
+      {this.givenHandle, this.scrollController, super.key});
 
-  ContestUserSubissionsScreen(this.contestStandings,
-      {String? handle, this.scrollController, super.key}) {
-    userID = handle ?? Constants.userID;
-  }
-
+  
   @override
-  State<ContestUserSubissionsScreen> createState() =>
-      _ContestUserSubissionsScreenState();
+  State<ContestUserSubmissionsScreen> createState() =>
+      _ContestUserSubmissionsScreenState();
 }
 
-class _ContestUserSubissionsScreenState
-    extends State<ContestUserSubissionsScreen>
-    with AutomaticKeepAliveClientMixin<ContestUserSubissionsScreen> {
+class _ContestUserSubmissionsScreenState
+    extends State<ContestUserSubmissionsScreen>
+    with AutomaticKeepAliveClientMixin<ContestUserSubmissionsScreen> {
   @override
   bool get wantKeepAlive => true;
 
+  late final Map<String, String> _values;
+  String? handle;
+  @override
+  void initState() {
+    super.initState();
+    _fetchValues();
+  }
+
+  Future<void> _fetchValues() async {
+    _values = await storage.readAll();
+    handle = widget.givenHandle ?? _values['handle'];
+    if (context.mounted) {setState(() {});}
+  }
+  
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    
+    if (handle==null || handle!.isEmpty){
+      return Center(child: const Text("Please Enter a handle name"));
+    }
     return Column(
       children: [
         Text(
-          "${widget.userID}'s Submissions",
+          "${handle}'s Submissions",
           style: const TextStyle(
             fontSize: 20,
           ),
@@ -44,7 +61,7 @@ class _ContestUserSubissionsScreenState
         Expanded(
           child: FutureBuilder<List<Submission>?>(
             future: ApiServices().getUserContestSubmissions(
-                widget.contestStandings.result!.contest!.id!, widget.userID),
+                widget.contestStandings.result!.contest!.id!, handle!),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {

@@ -1,12 +1,12 @@
 import 'package:cflytics/api/services.dart';
 import 'package:cflytics/models/return_objects/submission.dart';
 import 'package:cflytics/utils/colors.dart';
-import 'package:cflytics/utils/constants.dart';
 import 'package:cflytics/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SubmissionsListScreen extends StatefulWidget {
-  const SubmissionsListScreen({super.key});
+  String handle;
+  SubmissionsListScreen(this.handle, {super.key});
 
   @override
   State<SubmissionsListScreen> createState() => _SubmissionsListScreenState();
@@ -29,7 +29,7 @@ class _SubmissionsListScreenState extends State<SubmissionsListScreen> with Auto
         ),
         Expanded(
           child: FutureBuilder<List<Submission>?>(
-            future: ApiServices().getUserAllSubmissions(Constants.userID),
+            future: ApiServices().getUserAllSubmissions(widget.handle),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
