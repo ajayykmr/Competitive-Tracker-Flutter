@@ -23,7 +23,9 @@ class _RatingLineChartState extends State<RatingLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    List<FlSpot> spots = widget.ratingChanges
+    final textStyle = Theme.of(context).textTheme;
+
+    final List<FlSpot> spots = widget.ratingChanges
         .map((ratingChange) => FlSpot(
             ratingChange.ratingUpdateTimeSeconds!.toDouble(),
             ratingChange.newRating!.toDouble()))
@@ -48,7 +50,7 @@ class _RatingLineChartState extends State<RatingLineChart> {
         return Container();
       }
       return SideTitleWidget(
-        child: Text(value.toStringAsFixed(0)),
+        child: Text(value.toStringAsFixed(0), style: textStyle.bodySmall?.copyWith(fontSize: 14),),
         axisSide: meta.axisSide,
         // space: 10,
       );

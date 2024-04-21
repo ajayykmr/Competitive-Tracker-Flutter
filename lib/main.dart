@@ -1,7 +1,10 @@
+import 'package:cflytics/ui/common/app_bar.dart';
+import 'package:cflytics/ui/home_page/screens/home_screen.dart';
+import 'package:cflytics/utils/theme_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'ui/base_scaffold.dart';
-import 'utils/colors.dart';
+import 'ui/common/base_scaffold.dart';
 
 extension CapitalizedExtension on String {
   String capitalizeFirstLetter() {
@@ -12,31 +15,24 @@ extension CapitalizedExtension on String {
   }
 }
 
-//codemagic automatic build test
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Competitive Tracker',
-      theme: ThemeData(
-        primaryColor: AppColor.primary,
-        // colorSchemeSeed: AppColor.primary,
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primary),
-        useMaterial3: true,
-      ),
+      theme: lightTheme,
       home: const BaseScaffold(),
-      // home: Scaffold(appBar: MyAppBar(), body: Test()),
     );
   }
 }
+

@@ -1,30 +1,23 @@
-import 'package:cflytics/api/services.dart';
 import 'package:cflytics/main.dart';
 import 'package:cflytics/models/return_objects/user.dart';
-import 'package:cflytics/ui/app_bar.dart';
-import 'package:cflytics/ui/home_page/screens/home_screen.dart';
+import 'package:cflytics/providers/api_provider.dart';
+import 'package:cflytics/ui/common/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/colors.dart';
 import '../../../utils/utils.dart';
 
-class FriendsListScreen extends StatefulWidget {
+class FriendsListScreen extends ConsumerWidget {
   final String handle, apiKey, apiSecret;
-  const FriendsListScreen(this.handle, this.apiKey, this.apiSecret, {super.key});
+
+  const FriendsListScreen(this.handle, this.apiKey, this.apiSecret,
+      {super.key});
 
   @override
-  State<FriendsListScreen> createState() => _FriendsListScreenState();
-}
-
-class _FriendsListScreenState extends State<FriendsListScreen>
-    with AutomaticKeepAliveClientMixin<FriendsListScreen> {
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final friendsList =
+        ref.watch(GetFriendsListProvider(handle, apiKey, apiSecret));
     return Column(
       children: [
         const Text(
@@ -37,23 +30,19 @@ class _FriendsListScreenState extends State<FriendsListScreen>
         // Divider(
         //   color: AppColor.primary,
         // ),
-        Expanded(
-            child: FutureBuilder<List<User>?>(
-          future: ApiServices().getFriendsList(widget.handle, widget.apiKey, widget.apiSecret),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData &&
-                snapshot.data != null) {
-              var sortedFriendsList = snapshot.data!;
-              sortedFriendsList.sort((a, b) => b.rating!.compareTo(a.rating!));
-              return UsersListWidget(sortedFriendsList);
-            } else {
-              return Center(child: const Text("Please Try Again\nAlso, please ensure that you entered the correct API keys\n"));
+        friendsList.when(
+          data: (data) {
+            if (data == null) {
+              return const Text("NULL value received");
             }
+            data.sort((a, b) => b.rating!.compareTo(a.rating!));
+            return UsersListWidget(data);
           },
-        )),
+          error: (error, stackTrace) => const Center(
+              child: Text(
+                  "Please Try Again\nAlso, please ensure that you entered the correct API keys\n")),
+          loading: () => const Center(child: CircularProgressIndicator()),
+        ),
       ],
     );
   }
@@ -90,12 +79,14 @@ class UsersListWidget extends StatelessWidget {
               // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
               // )
               // );
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return Scaffold(
-                  appBar: MyAppBar(),
-                  body: userDetails(userList[index]),
-                );
-              },));
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) {
+                  return Scaffold(
+                    appBar: const MyAppBar(),
+                    body: UserPopupWidget(userList[index])
+                  );
+                },
+              ));
             },
             // contentPadding: EdgeInsets.all(10),
             leading: CircleAvatar(
@@ -203,7 +194,7 @@ class UserPopupWidget extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontStyle: FontStyle.italic,
-                              color: AppColor.greyText,
+                              color: AppColor.secondaryTextColor,
                             ),
                           ),
                           const SizedBox(
@@ -244,7 +235,7 @@ class UserPopupWidget extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontStyle: FontStyle.italic,
-                              color: AppColor.greyText,
+                              color: AppColor.secondaryTextColor,
                             ),
                           ),
                           const SizedBox(

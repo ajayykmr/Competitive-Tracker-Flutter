@@ -10,6 +10,9 @@
 .svn/
 migrate_working_dir/
 
+#riverpod code generation
+*.g.dart
+
 # IntelliJ related
 *.iml
 *.ipr

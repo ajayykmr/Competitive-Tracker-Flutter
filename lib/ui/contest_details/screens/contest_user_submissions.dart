@@ -1,96 +1,93 @@
-import 'package:cflytics/api/services.dart';
 import 'package:cflytics/models/contest_standings.dart';
 import 'package:cflytics/models/return_objects/submission.dart';
+import 'package:cflytics/providers/api_provider.dart';
+import 'package:cflytics/providers/secure_storage_provider.dart';
 import 'package:cflytics/utils/colors.dart';
+import 'package:cflytics/utils/constants.dart';
 import 'package:cflytics/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const storage = FlutterSecureStorage();
-class ContestUserSubmissionsScreen extends StatefulWidget {
+class ContestUserSubmissionsScreen extends ConsumerWidget {
   final ContestStandings contestStandings;
-  late final ScrollController? scrollController;
-  String? givenHandle;
-  ContestUserSubmissionsScreen(this.contestStandings,
+  final ScrollController? scrollController;
+  final String? givenHandle;
+
+  const ContestUserSubmissionsScreen(this.contestStandings,
       {this.givenHandle, this.scrollController, super.key});
 
-  
   @override
-  State<ContestUserSubmissionsScreen> createState() =>
-      _ContestUserSubmissionsScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _ContestUserSubmissionsScreenState
-    extends State<ContestUserSubmissionsScreen>
-    with AutomaticKeepAliveClientMixin<ContestUserSubmissionsScreen> {
-  @override
-  bool get wantKeepAlive => true;
+    final storage = ref.watch(secureStorageReadProvider);
 
-  late final Map<String, String> _values;
-  String? handle;
-  @override
-  void initState() {
-    super.initState();
-    _fetchValues();
-  }
+    return storage.when(
+      data: (data) {
+        final handle = givenHandle ?? data[Constants.handleKey];
 
-  Future<void> _fetchValues() async {
-    _values = await storage.readAll();
-    handle = widget.givenHandle ?? _values['handle'];
-    if (context.mounted) {setState(() {});}
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    
-    if (handle==null || handle!.isEmpty){
-      return Center(child: const Text("Please Enter a handle name"));
-    }
-    return Column(
-      children: [
-        Text(
-          "${handle}'s Submissions",
-          style: const TextStyle(
-            fontSize: 20,
-          ),
-        ),
-        const Divider(
+        if (handle==null || handle.isEmpty){
+          return const Center(child: Text("Please Enter a handle name"));
+        }
+        final getUserContestSubmissions = ref.watch(getUserContestSubmissionsProvider(
+          contestStandings.result!.contest!.id!,
+          handle,),
+        );
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "${handle}'s Submissions",
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            const Divider(
 
-        ),
-        Expanded(
-          child: FutureBuilder<List<Submission>?>(
-            future: ApiServices().getUserContestSubmissions(
-                widget.contestStandings.result!.contest!.id!, handle!),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                return ContestSubmissionsListWidget(
-                  snapshot.data!,
-                  scrollController: widget.scrollController,
+            ),
+            getUserContestSubmissions.when(
+              data: (data) {
+                if (data == null) {
+                  return const Text("NULL value received");
+                }
+                return Expanded(
+                  child: ContestSubmissionsListWidget(
+                    data,
+                    scrollController: scrollController,
+                  ),
                 );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else {
+              },
+              loading: () {
+                return const Center(child: CircularProgressIndicator());
+              },
+              error: (error, stackTrace) {
                 return const Center(
                   child: Text("Failed"),
                 );
-              }
-            },
-          ),
-        ),
-      ],
+              },
+            ),
+          ],
+        );
+
+      },
+      loading: () {
+        return const Center(child: CircularProgressIndicator());
+      },
+      error: (error, stackTrace) {
+        return const Center(
+          child: Text("Secure Storage Error"),
+        );
+      },
     );
+
+    return const Center(child: Text("EMPTY BODY"));
   }
 }
 
 class ContestSubmissionsListWidget extends StatelessWidget {
   final List<Submission> submissionsList;
-  late final ScrollController? scrollController;
+  final ScrollController? scrollController;
 
-  ContestSubmissionsListWidget(
+  const ContestSubmissionsListWidget(
     this.submissionsList, {
     this.scrollController,
     super.key,

@@ -1,4 +1,4 @@
-import 'package:cflytics/ui/app_bar.dart';
+import 'package:cflytics/ui/common/app_bar.dart';
 import 'package:cflytics/ui/contests_page/screens/contests_list_screen.dart';
 import 'package:cflytics/ui/home_page/home_page_tab_bar.dart';
 import 'package:cflytics/ui/leaderboard_page/screens/leaderboard_screen.dart';
@@ -17,6 +17,7 @@ class BaseScaffold extends StatefulWidget {
 class _BaseScaffoldState extends State<BaseScaffold> {
   static int _index = 0;
   static const List<Widget> _body = [
+    // HomePageTabBar(),
     HomePageTabBar(),
     LeaderBoardScreen(),
     ContestsListScreen(),
@@ -40,6 +41,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     Icons.bar_chart_rounded,
     Icons.menu_book_rounded
   ];
+
   static List<Tab> homePageTabs = List.generate(homePageTabIcons.length,
       (index) => Tab(icon: Icon(homePageTabIcons[index])));
 
@@ -59,15 +61,17 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   }
 
   Drawer buildDrawer(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return Drawer(
-      backgroundColor: AppColor.secondary,
+      backgroundColor: AppColor.scaffoldBackground,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           Container(
             color: AppColor.primary,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,24 +86,19 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                         height: 75,
                         width: 75,
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(10.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "CFlytics",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: textStyle.titleLarge,
                             ),
                             Text(
                               "by Ajay",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontStyle: FontStyle.italic,
-                              ),
+                              style: textStyle.bodySmall
+                                  ?.copyWith(fontStyle: FontStyle.italic),
                             ),
                           ],
                         ),
@@ -111,11 +110,11 @@ class _BaseScaffoldState extends State<BaseScaffold> {
             ),
           ),
           const SizedBox(
-            height: 4,
+            height: 8,
           ),
           ListTile(
-            dense: true,
             leading: const Icon(
+              size: 32,
               Icons.home_rounded,
             ),
             selected: _index == 0,
@@ -123,11 +122,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
               _selectIndex(0);
               Navigator.of(context).pop();
             },
-            title: const Text("Home"),
+            title: Text("Home", style: textStyle.bodyMedium,),
           ),
+
           ListTile(
-            dense: true,
             leading: const Icon(
+              size: 32,
               Icons.leaderboard_rounded,
               // size: 24,
             ),
@@ -136,15 +136,15 @@ class _BaseScaffoldState extends State<BaseScaffold> {
               Navigator.of(context).pop();
               _selectIndex(1);
             },
-            title: const Text("LeaderBoard"),
+            title: Text("LeaderBoard", style: textStyle.bodyMedium,),
           ),
           ListTile(
-            dense: true,
             leading: const Icon(
+              size: 32,
               Icons.list_rounded,
               // size: 24,
             ),
-            title: const Text("Contests"),
+            title: Text("Contests", style: textStyle.bodyMedium,),
             selected: _index == 2,
             onTap: () {
               // _selectDestination(2);
@@ -153,12 +153,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
             },
           ),
           ListTile(
-            dense: true,
             leading: const Icon(
+              size: 32,
               Icons.settings_rounded,
               // size: 24,
             ),
-            title: const Text("Settings"),
+            title: Text("Settings", style: textStyle.bodyMedium,),
             selected: _index == 3,
             onTap: () {
               Navigator.of(context).pop();
@@ -180,13 +180,13 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
               tabs: tabs[_index],
 
-              // labelColor: Colors.black,
-              // unselectedLabelColor: AppColor.secondary,
-              // indicatorColor: Colors.black,
+              labelColor: AppColor.primaryTextColor,
+              unselectedLabelColor: AppColor.secondary,
+              indicatorColor: AppColor.primaryTextColor,
 
-              labelColor: AppColor.secondary,
-              unselectedLabelColor: Colors.black,
-              indicatorColor: AppColor.secondary,
+              // labelColor: AppColor.secondary,
+              // unselectedLabelColor: AppColor.primaryTextColor,
+              // indicatorColor: AppColor.secondary,
 
               indicatorSize: TabBarIndicatorSize.label,
               indicatorPadding: const EdgeInsets.all(5.0),

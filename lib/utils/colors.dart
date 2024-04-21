@@ -5,15 +5,19 @@ class AppColor {
   AppColor._();
   //0xFF is opacity
   // static const Color primary = Color(0xFF2F39C5);
+  static const Color primary = Color(0xFF7D80DA);
+  static const Color secondary = Color(0xFFE1E0FF);
+  static const Color  scaffoldBackground = Color(0xFFF1EDEE);
 
-  //copy this for hexvalue
-  //static const Color name = Color(0xFF);
-  static const Color primary = Color(0xFF4EB4E5);
-  static const Color secondary = Color(0xFFEDF9FF);
+  // static const Color primaryTextColor = Color(0xFF00008B);
+  static const Color primaryTextColor = Color(0xFF000000);
+  static const Color secondaryTextColor = Color(0xFF444444);
 
-  static const Color blackText = Color(0xFF000000);
-  static const Color greyText = Color(0xFF756262);
-
+  // static const Color green = Color(0xFF77FF94);
+  static const Color green = Color(0xFF4AA15D);
+  static const Color red = Color(0xFFFF7477);
+  static const Color plus = green;
+  static const Color minus = red;
 
   static const Color newbie = Color(0xFF808080);
   static const Color pupil = Color(0xFF008000);
@@ -26,6 +30,4 @@ class AppColor {
   static const Color internationalGrandmaster = Color(0xFFff0000);
   static const Color legendaryGrandmaster = Color(0xFFff0000);
 
-  static const Color plus = Color(0xFF00D100);
-  static const Color minus = Color(0xFFff0000);
 }

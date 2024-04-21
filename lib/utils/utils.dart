@@ -7,11 +7,11 @@ import 'package:url_launcher/url_launcher.dart';
 class Utils {
   Utils._();
 
-  static String capitalizeFirstLetterFunction(String s) => s[0].toUpperCase() + s.substring(1);
+  static String capitalizeFirstLetterFunction(String s) =>
+      s[0].toUpperCase() + s.substring(1);
 
-  static String monthFromInteger(int month){
-
-    switch(month){
+  static String monthFromInteger(int month) {
+    switch (month) {
       case 1:
         return "Jan";
       case 2:
@@ -38,65 +38,77 @@ class Utils {
         return "Dec";
     }
   }
-  static Color ratingColor(int rating)
-  {
-    switch(rating){
-      case <1200:             return AppColor.newbie;
-      case >=1200 && <1400:   return AppColor.pupil;
-      case >=1400 && <1600:   return AppColor.specialist;
-      case >=1600 && <1900:   return AppColor.expert;
-      case >=1900 && <2100:   return AppColor.candidateMaster;
-      case >=2100 && <2300:   return AppColor.master;
-      case >=2300 && <2400:   return AppColor.internationalMaster;
-      case >=2400 && <2600:   return AppColor.grandmaster;
-      case >=2600 && <3000:   return AppColor.internationalGrandmaster;
-      case _:                 return AppColor.legendaryGrandmaster;
+
+  static Color ratingColor(int rating) {
+    switch (rating) {
+      case < 1200:
+        return AppColor.newbie;
+      case >= 1200 && < 1400:
+        return AppColor.pupil;
+      case >= 1400 && < 1600:
+        return AppColor.specialist;
+      case >= 1600 && < 1900:
+        return AppColor.expert;
+      case >= 1900 && < 2100:
+        return AppColor.candidateMaster;
+      case >= 2100 && < 2300:
+        return AppColor.master;
+      case >= 2300 && < 2400:
+        return AppColor.internationalMaster;
+      case >= 2400 && < 2600:
+        return AppColor.grandmaster;
+      case >= 2600 && < 3000:
+        return AppColor.internationalGrandmaster;
+      case _:
+        return AppColor.legendaryGrandmaster;
     }
   }
 
-  static String ratingDelta(int newRating, int oldRating){
-    if (newRating-oldRating>=0) {
-      return "+${newRating-oldRating}";
+  static String ratingDelta(int newRating, int oldRating) {
+    if (newRating - oldRating >= 0) {
+      return "+${newRating - oldRating}";
     } else {
-      return (newRating-oldRating).toString();
+      return (newRating - oldRating).toString();
     }
   }
 
   static openSubmission(Submission sub) async {
-    final url = "https://codeforces.com/contest/${sub.contestId}/submission/${sub.id}";
+    final url = "https://codeforces.com/contest/${sub
+        .contestId}/submission/${sub.id}";
     final uri = Uri.parse(url);
     launchUrl(uri, mode: LaunchMode.inAppBrowserView);
   }
 
   //https://codeforces.com/contest/1891/problem/A
   static openProblem(Problem problem) async {
-    final url = "https://codeforces.com/contest/${problem.contestId}/problem/${problem.index}";
+    final url = "https://codeforces.com/contest/${problem
+        .contestId}/problem/${problem.index}";
     final uri = Uri.parse(url);
     launchUrl(uri, mode: LaunchMode.inAppBrowserView);
   }
 
-  static DateTime getDateTimeFromEpochSeconds(int epochTime){
-    return DateTime.fromMillisecondsSinceEpoch(epochTime*1000);
+  static DateTime getDateTimeFromEpochSeconds(int epochTime) {
+    return DateTime.fromMillisecondsSinceEpoch(epochTime * 1000);
   }
 
-  static String getDateStringFromEpochSeconds(int epochTime){
+  static String getDateStringFromEpochSeconds(int epochTime) {
     DateTime dateTime = getDateTimeFromEpochSeconds(epochTime);
 
     String day = dateTime.day.toString();
     String month = dateTime.month.toString();
     String year = dateTime.year.toString();
 
-    if (day.length==1) {
+    if (day.length == 1) {
       day = "0$day";
     }
-    if (month.length==1){
+    if (month.length == 1) {
       month = "0$month";
     }
 
     return "$day-$month-$year";
   }
 
-  static String getTimeStringFromEpochSeconds(int epochTime){
+  static String getTimeStringFromEpochSeconds(int epochTime) {
     DateTime dateTime = getDateTimeFromEpochSeconds(epochTime);
 
     if (dateTime.minute < 10) {
@@ -106,29 +118,66 @@ class Utils {
     }
   }
 
-  static String capitalizeFirstLetter(String s) => s[0].toUpperCase() + s.substring(1);
+  static String capitalizeFirstLetter(String s) =>
+      s[0].toUpperCase() + s.substring(1);
 
   static String getTimeStringFromSeconds(int seconds) {
-
     //2147483647
-    if (seconds==2147483647){
+    if (seconds == 2147483647) {
       return "--:--";
     }
     final Duration d = Duration(seconds: seconds);
 
     String hours = d.inHours.toString();
-    String minutes = (d.inMinutes%60).toString();
+    String minutes = (d.inMinutes % 60).toString();
 
-    if (hours.length==1){
+    if (hours.length == 1) {
       hours = "0$hours";
     }
-    if (minutes.length==1){
+    if (minutes.length == 1) {
       minutes = "0$minutes";
     }
 
     return "$hours:$minutes";
   }
 
+  static String getSubmissionVerdict(String verdict) {
+    switch (verdict) {
+      case "OK":
+        return "Accepted";
+      case "WRONG_ANSWER":
+        return "Wrong Answer";
+      case "TIME_LIMIT_EXCEEDED":
+        return "TLE";
+      case "MEMORY_LIMIT_EXCEEDED":
+        return "MLE";
+      case "RUNTIME_ERROR":
+        return "Runtime Error";
+      case "COMPILATION_ERROR":
+        return "Compilation Error";
+      case "IDLENESS_LIMIT_EXCEEDED":
+        return "Idleness Limit Exceeded";
+      case "REJECTED":
+        return "Rejected";
+      case "SKIPPED":
+        return "Skipped";
+      case "FAILED":
+        return "Failed";
+      case "TESTING":
+        return "Testing";
+      case "PARTIAL":
+        return "Partial";
+      case "PRESENTATION_ERROR":
+        return "Presentation Error";
+      case "CRASHED":
+        return "Crashed";
+      case "SECURITY_VIOLATED":
+        return "Security Violated";
+      case "INPUT_PREPARATION_CRASHED":
+        return "Input Preparation Crashed";
+      case _:
+        return "Unknown";
+    }
+  }
+
 }
-
-

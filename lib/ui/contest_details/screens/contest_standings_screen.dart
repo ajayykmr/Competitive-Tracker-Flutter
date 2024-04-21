@@ -17,13 +17,9 @@ class ContestStandingsScreen extends StatefulWidget {
   State<ContestStandingsScreen> createState() => _ContestStandingsScreenState();
 }
 
-class _ContestStandingsScreenState extends State<ContestStandingsScreen>
-    with AutomaticKeepAliveClientMixin<ContestStandingsScreen> {
-  @override
-  bool get wantKeepAlive => true;
-
-  late final Map<String, String> _values;
+class _ContestStandingsScreenState extends State<ContestStandingsScreen> {
   late final String? myHandle;
+
   @override
   void initState() {
     super.initState();
@@ -31,33 +27,34 @@ class _ContestStandingsScreenState extends State<ContestStandingsScreen>
   }
 
   Future<void> _fetchValues() async {
-    _values = await storage.readAll();
+    Map<String, String> _values = await storage.readAll();
     myHandle = _values['handle'];
-    if (context.mounted) {setState(() {});}
+    if (context.mounted) {
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    final textStyle = Theme.of(context).textTheme;
     return Column(
       children: [
-        const Text(
-          "Standings",
-          style: TextStyle(
-            fontSize: 24,
-          ),
-        ),
-        Flexible(child: StandingsTable(widget.contestStandings)),
+        Text("Standings", style: textStyle.bodyLarge),
+        Flexible(
+            child: StandingsTable(
+          widget.contestStandings,
+          myHandle: myHandle,
+        )),
       ],
     );
   }
 }
 
 class StandingsTable extends StatelessWidget {
-
   final ContestStandings contestStandings;
   late final int numberOfProblems;
   final String? myHandle;
+
   StandingsTable(this.contestStandings, {this.myHandle, super.key}) {
     numberOfProblems = contestStandings.result!.problems!.length;
   }
@@ -115,17 +112,19 @@ class StandingsTable extends StatelessWidget {
               label: Material(
                 color: Colors.grey.shade200,
                 child: InkWell(
-
-                  onTap: () => Utils.openProblem(contestStandings.result!.problems![index]),
+                  onTap: () => Utils.openProblem(
+                      contestStandings.result!.problems![index]),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         contestStandings.result!.problems![index].index!,
-                        style: const TextStyle(fontSize: 14, color: Colors.blue),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.blue),
                       ),
-                      if (contestStandings.result!.problems![index].points != null)
+                      if (contestStandings.result!.problems![index].points !=
+                          null)
                         Text(
                           "(${contestStandings.result!.problems![index].points!.toStringAsFixed(0)})",
                           style: const TextStyle(fontSize: 12),
@@ -146,13 +145,10 @@ class StandingsTable extends StatelessWidget {
         return DataRow2(
           onTap: () {
             showModalBottomSheet(
-
               enableDrag: true,
               isDismissible: true,
               isScrollControlled: true,
-
               backgroundColor: AppColor.secondary,
-
               context: context,
               builder: (context) {
                 return Padding(
@@ -160,11 +156,15 @@ class StandingsTable extends StatelessWidget {
                   child: DraggableScrollableSheet(
                     initialChildSize: 0.5,
                     minChildSize: 0.1,
-                    maxChildSize:  0.95,
+                    maxChildSize: 0.95,
                     expand: false,
-                    builder: (context, scrollController) =>  ContestUserSubmissionsScreen(contestStandings,
-                        givenHandle: contestStandings
-                            .result!.rows![INDEX].party!.members![0].handle, scrollController: scrollController,),
+                    builder: (context, scrollController) =>
+                        ContestUserSubmissionsScreen(
+                      contestStandings,
+                      givenHandle: contestStandings
+                          .result!.rows![INDEX].party!.members![0].handle,
+                      scrollController: scrollController,
+                    ),
                   ),
                 );
               },
@@ -193,10 +193,8 @@ class StandingsTable extends StatelessWidget {
       return DataCell(Text(
         "${INDEX + 1}. $handle",
         style: TextStyle(
-          fontWeight:
-              (handle == myHandle) ? FontWeight.w800 : FontWeight.w500,
-          decoration:
-              (handle == myHandle) ? TextDecoration.underline : null,
+          fontWeight: (handle == myHandle) ? FontWeight.w800 : FontWeight.w500,
+          decoration: (handle == myHandle) ? TextDecoration.underline : null,
         ),
       ));
     } else {
@@ -204,11 +202,9 @@ class StandingsTable extends StatelessWidget {
         Text(
           "* ${contestStandings.result!.rows![INDEX].party!.members![0].handle!}",
           style: TextStyle(
-            fontWeight: (handle == myHandle)
-                ? FontWeight.w400
-                : FontWeight.normal,
-            decoration:
-                (handle == myHandle) ? TextDecoration.underline : null,
+            fontWeight:
+                (handle == myHandle) ? FontWeight.w400 : FontWeight.normal,
+            decoration: (handle == myHandle) ? TextDecoration.underline : null,
           ),
         ),
       );

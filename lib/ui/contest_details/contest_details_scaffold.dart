@@ -1,62 +1,87 @@
-import 'package:cflytics/api/services.dart';
 import 'package:cflytics/models/contest_standings.dart';
-import 'package:cflytics/ui/app_bar.dart';
+import 'package:cflytics/providers/api_provider.dart';
+import 'package:cflytics/ui/common/app_bar.dart';
 import 'package:cflytics/ui/contest_details/screens/contest_problems_screen.dart';
 import 'package:cflytics/ui/contest_details/screens/contest_standings_friends_screen.dart';
 import 'package:cflytics/ui/contest_details/screens/contest_standings_screen.dart';
 import 'package:cflytics/ui/contest_details/screens/contest_user_submissions.dart';
 import 'package:cflytics/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ContestDetailsScaffold extends StatefulWidget {
+class ContestDetailsScaffold extends ConsumerStatefulWidget {
   final int contestId;
 
   const ContestDetailsScaffold(this.contestId, {super.key});
 
   @override
-  State<ContestDetailsScaffold> createState() => _ContestDetailsScaffoldState();
+  ConsumerState<ContestDetailsScaffold> createState() =>
+      _ContestDetailsScaffoldState();
 }
 
-class _ContestDetailsScaffoldState extends State<ContestDetailsScaffold> {
+class _ContestDetailsScaffoldState
+    extends ConsumerState<ContestDetailsScaffold> {
+  String? appBarTitle;
+  bool isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    appBarTitle = widget.contestId.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final contestStandings =
+        ref.watch(getContestStandingsProvider(widget.contestId));
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         // backgroundColor: AppColor.secondary,
         appBar: MyAppBar(
-          actions: [
-            IconButton(
-                onPressed: () {
-                  setState(() {});
-                },
-                icon: const Icon(Icons.refresh_rounded))
-          ],
+          key: ValueKey(appBarTitle),
+          title: appBarTitle,
+          // actions: const [
+          // IconButton(
+          //     onPressed: () {
+          //       // ref.invalidate(getContestStandingsProvider(contestId));
+          //     },
+          //     icon: const Icon(Icons.refresh_rounded))
+          // ],
         ),
-        body: FutureBuilder<ContestStandings?>(
-          future: ApiServices().getContestStandings(widget.contestId),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              return ContestDetailsTabBarViewWidget(snapshot.data!);
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              return const Center(
-                child: Text("Failed"),
-              );
+        body: contestStandings.when(
+          data: (data) {
+            if (data == null) {
+              return const Text("NULL value received");
             }
+
+            Future.delayed(const Duration(milliseconds: 0), () {
+              setState(() {
+                isLoaded = true;
+                appBarTitle = data.result?.contest?.name;
+              });
+            });
+
+            return ContestDetailsTabBarViewWidget(data);
+          },
+          loading: () {
+            return const Center(child: CircularProgressIndicator());
+          },
+          error: (error, stackTrace) {
+            return const Center(
+              child: Text("Error:"),
+            );
           },
         ),
 
-        bottomNavigationBar: const Material(
+        bottomNavigationBar: !isLoaded ? null : Material(
           color: AppColor.primary,
           child: TabBar(
             isScrollable: true,
+            labelStyle: Theme.of(context).textTheme.bodyLarge,
             // automaticIndicatorColorAdjustment: true,
-            tabs: [
+            tabs: const [
               Tab(
                 icon: Icon(Icons.list_alt_rounded),
                 text: "Problems",
@@ -80,7 +105,7 @@ class _ContestDetailsScaffoldState extends State<ContestDetailsScaffold> {
             indicatorColor: AppColor.secondary,
 
             indicatorSize: TabBarIndicatorSize.label,
-            indicatorPadding: EdgeInsets.all(5.0),
+            indicatorPadding: const EdgeInsets.all(5.0),
             indicatorWeight: 4,
             dividerColor: AppColor.primary,
           ),
