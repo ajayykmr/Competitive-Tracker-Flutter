@@ -2,12 +2,10 @@ import 'package:cflytics/models/return_objects/rating_changes.dart';
 import 'package:cflytics/providers/api_provider.dart';
 import 'package:cflytics/ui/contest_details/contest_details_scaffold.dart';
 import 'package:cflytics/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/colors.dart';
-import '../../../utils/constants.dart';
 
 class RatingHistoryScreen extends ConsumerWidget {
   final String handle;
@@ -107,24 +105,24 @@ class RatingChangeCard extends StatelessWidget {
                   ? AppColor.green
                   : AppColor.red,
             ),
-            // right: BorderSide(
-            //   width: 1.0,
-            //   color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
-            //       ? AppColor.green
-            //       : AppColor.red,
-            // ),
-            // top: BorderSide(
-            //   width: 1.0,
-            //   color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
-            //       ? AppColor.green
-            //       : AppColor.red,
-            // ),
-            // bottom: BorderSide(
-            //   width: 1.0,
-            //   color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
-            //       ? AppColor.green
-            //       : AppColor.red,
-            // ),
+            right: BorderSide(
+              width: 1.0,
+              color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+            top: BorderSide(
+              width: 1.0,
+              color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+            bottom: BorderSide(
+              width: 1.0,
+              color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
           ),
         ),
         child: Row(
@@ -132,7 +130,7 @@ class RatingChangeCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex:3,
+              flex: 3,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,10 +138,10 @@ class RatingChangeCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.only(right: 8.0),
                     decoration: const BoxDecoration(
-                      // border: Border(
-                      //   right: BorderSide(width: 1.0, color: AppColor.secondaryTextColor),
-                      // ),
-                    ),
+                        // border: Border(
+                        //   right: BorderSide(width: 1.0, color: AppColor.secondaryTextColor),
+                        // ),
+                        ),
                     child: Text(
                       position.toString(),
                       style: textTheme.bodySmall,
@@ -165,7 +163,8 @@ class RatingChangeCard extends StatelessWidget {
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: "Rank: ", style: textTheme.labelSmall),
+                                    text: "Rank: ",
+                                    style: textTheme.labelSmall),
                                 TextSpan(
                                   text: ratingChange.rank!.toString(),
                                   style: textTheme.bodySmall,
@@ -178,7 +177,8 @@ class RatingChangeCard extends StatelessWidget {
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: "Date: ", style: textTheme.labelSmall),
+                                    text: "Date: ",
+                                    style: textTheme.labelSmall),
                                 TextSpan(
                                   text: Utils.getDateStringFromEpochSeconds(
                                       ratingChange.ratingUpdateTimeSeconds!),
@@ -213,10 +213,11 @@ class RatingChangeCard extends StatelessWidget {
                       Utils.ratingDelta(
                           ratingChange.newRating!, ratingChange.oldRating!),
                       style: textTheme.titleSmall?.copyWith(
-                        color:
-                            (ratingChange.newRating! - ratingChange.oldRating! >= 0)
-                                ? AppColor.plus
-                                : AppColor.minus,
+                        color: (ratingChange.newRating! -
+                                    ratingChange.oldRating! >=
+                                0)
+                            ? AppColor.plus
+                            : AppColor.minus,
                         // fontStyle: FontStyle.italic,
                       ),
                     ),

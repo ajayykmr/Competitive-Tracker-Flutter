@@ -13,11 +13,17 @@ class AppColor {
   static const Color primaryTextColor = Color(0xFF000000);
   static const Color secondaryTextColor = Color(0xFF444444);
 
+  static Color tableHeadingRowColor = Colors.grey.shade200;
+
   // static const Color green = Color(0xFF77FF94);
   static const Color green = Color(0xFF4AA15D);
   static const Color red = Color(0xFFFF7477);
   static const Color plus = green;
   static const Color minus = red;
+
+  static const Color blue = Color(0xFF0000FF);
+
+  static const Color hyperlink = blue;
 
   static const Color newbie = Color(0xFF808080);
   static const Color pupil = Color(0xFF008000);

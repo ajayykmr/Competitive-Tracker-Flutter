@@ -18,31 +18,29 @@ class ContestUserSubmissionsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
+    final textTheme = Theme.of(context).textTheme;
     final storage = ref.watch(secureStorageReadProvider);
 
     return storage.when(
       data: (data) {
         final handle = givenHandle ?? data[Constants.handleKey];
 
-        if (handle==null || handle.isEmpty){
+
+        if (handle == null || handle.isEmpty) {
           return const Center(child: Text("Please Enter a handle name"));
         }
-        final getUserContestSubmissions = ref.watch(getUserContestSubmissionsProvider(
-          contestStandings.result!.contest!.id!,
-          handle,),
+        final getUserContestSubmissions = ref.watch(
+          getUserContestSubmissionsProvider(
+            contestStandings.result!.contest!.id!,
+            handle,
+          ),
         );
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "${handle}'s Submissions",
-              style: const TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            const Divider(
-
+              style: textTheme.bodyLarge,
             ),
             getUserContestSubmissions.when(
               data: (data) {
@@ -67,7 +65,6 @@ class ContestUserSubmissionsScreen extends ConsumerWidget {
             ),
           ],
         );
-
       },
       loading: () {
         return const Center(child: CircularProgressIndicator());
@@ -95,38 +92,71 @@ class ContestSubmissionsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+
     return ListView.builder(
       controller: scrollController,
       itemCount: submissionsList.length,
       itemBuilder: (context, index) {
-        return Card(
-          elevation: 0,
-          color: ((submissionsList[index].verdict == "OK")
-                  ? AppColor.plus
-                  : AppColor.minus)
-              .withOpacity(0.3),
-          child: ListTile(
-            onTap: () async {
-              Utils.openSubmission(submissionsList[index]);
-            },
-            isThreeLine: false,
-            // contentPadding: const EdgeInsets.all(10),
-            title: Text(
-              "${submissionsList[index].problem!.index}. ${submissionsList[index].problem!.name}",
-              style: const TextStyle(
-                fontSize: 14,
-              ),
+        return ContestUserSubmissionCard(submissionsList[index]);
+      },
+    );
+  }
+}
+
+class ContestUserSubmissionCard extends StatelessWidget {
+  final Submission submission;
+  const ContestUserSubmissionCard(this.submission, {super.key});
+  @override
+  Widget build(BuildContext context) {
+    final passed = submission.verdict=="OK";
+
+    final TextTheme textStyle = Theme.of(context).textTheme;
+    return InkWell(
+      onTap: () async {
+        Utils.openSubmission(submission);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          border: Border(
+            left: BorderSide(
+              width: 10.0,
+              color: passed ? AppColor.green : AppColor.red
             ),
-            trailing: Text(
-              Utils.getTimeStringFromSeconds(
-                  submissionsList[index].relativeTimeSeconds!),
-              style: const TextStyle(
-                fontSize: 12,
-              ),
+            right: BorderSide(
+              width: 1.0,
+                color: passed ? AppColor.green : AppColor.red
+            ),
+            top: BorderSide(
+              width: 1.0,
+                color: passed ? AppColor.green : AppColor.red
+            ),
+            bottom: BorderSide(
+              width: 1.0,
+                color: passed ? AppColor.green : AppColor.red
             ),
           ),
-        );
-      },
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              "${submission.problem!.index}. ${submission.problem!.name}",
+              style: textStyle.bodyMedium,
+            ),
+            Text(
+              Utils.getTimeStringFromSeconds(
+                  submission.relativeTimeSeconds!),
+              style: textStyle.labelMedium,
+            )
+          ],
+        ),
+      ),
     );
   }
 }

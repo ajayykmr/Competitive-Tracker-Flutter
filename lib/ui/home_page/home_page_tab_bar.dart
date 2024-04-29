@@ -12,6 +12,7 @@ class HomePageTabBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final textStyle = Theme.of(context).textTheme;
     final storage = ref.watch(secureStorageReadProvider);
 

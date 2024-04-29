@@ -98,24 +98,24 @@ class SubmissionCard extends StatelessWidget {
                   ? AppColor.green
                   : AppColor.red,
             ),
-            // right: BorderSide(
-            //   width: 1.0,
-            //   color: (submissionPassed)
-            //       ? AppColor.green
-            //       : AppColor.red,
-            // ),
-            // top: BorderSide(
-            //   width: 1.0,
-            //   color: (submissionPassed)
-            //       ? AppColor.green
-            //       : AppColor.red,
-            // ),
-            // bottom: BorderSide(
-            //   width: 1.0,
-            //   color: (submissionPassed)
-            //       ? AppColor.green
-            //       : AppColor.red,
-            // ),
+            right: BorderSide(
+              width: 1.0,
+              color: (submissionPassed)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+            top: BorderSide(
+              width: 1.0,
+              color: (submissionPassed)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+            bottom: BorderSide(
+              width: 1.0,
+              color: (submissionPassed)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
           ),
         ),
         child: Row(

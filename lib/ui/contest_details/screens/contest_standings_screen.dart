@@ -1,42 +1,42 @@
 import 'package:cflytics/models/contest_standings.dart';
+import 'package:cflytics/providers/secure_storage_provider.dart';
 import 'package:cflytics/ui/contest_details/screens/contest_user_submissions.dart';
 import 'package:cflytics/utils/colors.dart';
+import 'package:cflytics/utils/constants.dart';
 import 'package:cflytics/utils/utils.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const storage = FlutterSecureStorage();
 
-class ContestStandingsScreen extends StatefulWidget {
+class ContestStandingsScreen extends ConsumerStatefulWidget {
   final ContestStandings contestStandings;
 
   const ContestStandingsScreen(this.contestStandings, {super.key});
 
   @override
-  State<ContestStandingsScreen> createState() => _ContestStandingsScreenState();
+  ConsumerState<ContestStandingsScreen> createState() =>
+      _ContestStandingsScreenState();
 }
 
-class _ContestStandingsScreenState extends State<ContestStandingsScreen> {
-  late final String? myHandle;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchValues();
-  }
-
-  Future<void> _fetchValues() async {
-    Map<String, String> _values = await storage.readAll();
-    myHandle = _values['handle'];
-    if (context.mounted) {
-      setState(() {});
-    }
-  }
+class _ContestStandingsScreenState
+    extends ConsumerState<ContestStandingsScreen> {
+  String? myHandle;
 
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
+
+    final storage = ref.watch(secureStorageReadProvider);
+
+    storage.whenData((value) => (value) {
+          setState(() {
+            myHandle = value[Constants.handleKey];
+          });
+        });
+
     return Column(
       children: [
         Text("Standings", style: textStyle.bodyLarge),
@@ -54,6 +54,7 @@ class StandingsTable extends StatelessWidget {
   final ContestStandings contestStandings;
   late final int numberOfProblems;
   final String? myHandle;
+  late final TextTheme textStyle;
 
   StandingsTable(this.contestStandings, {this.myHandle, super.key}) {
     numberOfProblems = contestStandings.result!.problems!.length;
@@ -61,6 +62,8 @@ class StandingsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    textStyle = Theme.of(context).textTheme;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DataTable2(
@@ -68,8 +71,8 @@ class StandingsTable extends StatelessWidget {
         columnSpacing: 10,
         horizontalMargin: 0,
         fixedLeftColumns: 1,
-        headingRowColor:
-            MaterialStateColor.resolveWith((states) => Colors.grey.shade200),
+        headingRowColor: MaterialStateColor.resolveWith(
+            (states) => AppColor.tableHeadingRowColor),
         dataRowHeight: 55,
         fixedColumnsColor: AppColor.secondary,
         minWidth: 700,
@@ -83,24 +86,18 @@ class StandingsTable extends StatelessWidget {
 
   List<DataColumn2> buildColumns() {
     return <DataColumn2>[
-          const DataColumn2(
-            label: Text("Handle"),
+          DataColumn2(
+            label: Text("Handle", style: textStyle.titleMedium),
             size: ColumnSize.L,
           ),
-          const DataColumn2(
+          DataColumn2(
             // numeric: true,
             label: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  "Rank",
-                  style: TextStyle(fontSize: 14),
-                ),
-                Text(
-                  "(Points)",
-                  style: TextStyle(fontSize: 12),
-                ),
+                Text("Rank", style: textStyle.titleSmall),
+                Text("(Points)", style: textStyle.bodySmall),
               ],
             ),
           ),
@@ -110,7 +107,7 @@ class StandingsTable extends StatelessWidget {
           (index) {
             return DataColumn2(
               label: Material(
-                color: Colors.grey.shade200,
+                color: AppColor.tableHeadingRowColor,
                 child: InkWell(
                   onTap: () => Utils.openProblem(
                       contestStandings.result!.problems![index]),
@@ -118,16 +115,16 @@ class StandingsTable extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        contestStandings.result!.problems![index].index!,
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.blue),
-                      ),
+                      Text(contestStandings.result!.problems![index].index!,
+                          style: textStyle.titleSmall?.copyWith(
+                            color: AppColor.hyperlink,
+                            decoration: TextDecoration.underline,
+                          )),
                       if (contestStandings.result!.problems![index].points !=
                           null)
                         Text(
                           "(${contestStandings.result!.problems![index].points!.toStringAsFixed(0)})",
-                          style: const TextStyle(fontSize: 12),
+                          style: textStyle.bodySmall,
                         ),
                     ],
                   ),
@@ -192,7 +189,7 @@ class StandingsTable extends StatelessWidget {
     if (rank > 0) {
       return DataCell(Text(
         "${INDEX + 1}. $handle",
-        style: TextStyle(
+        style: textStyle.titleSmall?.copyWith(
           fontWeight: (handle == myHandle) ? FontWeight.w800 : FontWeight.w500,
           decoration: (handle == myHandle) ? TextDecoration.underline : null,
         ),
@@ -201,7 +198,7 @@ class StandingsTable extends StatelessWidget {
       return DataCell(
         Text(
           "* ${contestStandings.result!.rows![INDEX].party!.members![0].handle!}",
-          style: TextStyle(
+          style: textStyle.titleSmall?.copyWith(
             fontWeight:
                 (handle == myHandle) ? FontWeight.w400 : FontWeight.normal,
             decoration: (handle == myHandle) ? TextDecoration.underline : null,
@@ -215,30 +212,20 @@ class StandingsTable extends StatelessWidget {
     final rank = contestStandings.result!.rows![INDEX].rank!;
 
     if (rank == 0) {
-      return const DataCell(
-        Text(
-          "Practice",
-          style: TextStyle(
-            // fontWeight: FontWeight.bold,
-            fontSize: 12,
-          ),
-        ),
+      return DataCell(
+        Text("Practice", style: textStyle.bodySmall),
       );
     } else {
       return DataCell(Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Text(contestStandings.result!.rows![INDEX].rank.toString(),
+              textAlign: TextAlign.center, style: textStyle.titleSmall),
           Text(
-            contestStandings.result!.rows![INDEX].rank.toString(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            textAlign: TextAlign.center,
-            "(${contestStandings.result!.rows![INDEX].points!.toInt()})",
-            style: const TextStyle(fontSize: 12),
-          )
+              textAlign: TextAlign.center,
+              "(${contestStandings.result!.rows![INDEX].points!.toInt()})",
+              style: textStyle.bodySmall)
         ],
       ));
     }
@@ -267,11 +254,8 @@ class StandingsTable extends StatelessWidget {
           ),
         );
       } else {
-        return const DataCell(
-          Text(
-            "-",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+        return DataCell(
+          Text("-", style: textStyle.titleSmall),
         );
       }
     }
@@ -283,29 +267,25 @@ class StandingsTable extends StatelessWidget {
         children: [
           Text(
             points.toString(),
-            style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: AppColor.plus,
-                fontSize: 14),
+            style: textStyle.titleSmall?.copyWith(
+              color: AppColor.plus,
+            ),
           ),
           Text(
-            Utils.getTimeStringFromSeconds(contestStandings.result!.rows![INDEX]
-                .problemResults![index].bestSubmissionTimeSeconds!),
-            style: const TextStyle(fontSize: 12),
-          )
+              Utils.getTimeStringFromSeconds(contestStandings
+                  .result!
+                  .rows![INDEX]
+                  .problemResults![index]
+                  .bestSubmissionTimeSeconds!),
+              style: textStyle.bodySmall)
         ],
       ));
     } else if (rejectedCount > 0) {
       return DataCell(Text(
-        "-${contestStandings.result!.rows![INDEX].problemResults![index].rejectedAttemptCount!}",
-        style:
-            const TextStyle(color: AppColor.minus, fontWeight: FontWeight.bold),
-      ));
+          "-${contestStandings.result!.rows![INDEX].problemResults![index].rejectedAttemptCount!}",
+          style: textStyle.titleSmall?.copyWith(color: AppColor.minus)));
     } else {
-      return const DataCell(Text(
-        "-",
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ));
+      return DataCell(Text("-", style: textStyle.titleSmall));
     }
   }
 }

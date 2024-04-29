@@ -79,7 +79,8 @@ class _ContestDetailsScaffoldState
           color: AppColor.primary,
           child: TabBar(
             isScrollable: true,
-            labelStyle: Theme.of(context).textTheme.bodyLarge,
+            labelStyle: Theme.of(context).textTheme.bodySmall,
+            unselectedLabelStyle: Theme.of(context).textTheme.labelSmall,
             // automaticIndicatorColorAdjustment: true,
             tabs: const [
               Tab(
@@ -100,9 +101,13 @@ class _ContestDetailsScaffoldState
               ),
             ],
 
-            labelColor: AppColor.secondary,
-            unselectedLabelColor: Colors.black,
-            indicatorColor: AppColor.secondary,
+            labelColor: AppColor.primaryTextColor,
+            unselectedLabelColor: AppColor.secondary,
+            indicatorColor: AppColor.primaryTextColor,
+
+            // labelColor: AppColor.secondary,
+            // unselectedLabelColor: AppColor.primaryTextColor,
+            // indicatorColor: AppColor.secondary,
 
             indicatorSize: TabBarIndicatorSize.label,
             indicatorPadding: const EdgeInsets.all(5.0),

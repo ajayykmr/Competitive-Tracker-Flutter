@@ -1,9 +1,6 @@
-import 'package:cflytics/ui/common/app_bar.dart';
-import 'package:cflytics/ui/home_page/screens/home_screen.dart';
 import 'package:cflytics/utils/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'ui/common/base_scaffold.dart';
 
 extension CapitalizedExtension on String {

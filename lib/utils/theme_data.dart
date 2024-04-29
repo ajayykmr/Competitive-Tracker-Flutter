@@ -11,7 +11,8 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: AppColor.scaffoldBackground,
   appBarTheme: const AppBarTheme(
     color: AppColor.primary,
-    elevation: 1,
+    // color: AppColor.scaffoldBackground,
+    elevation: 0,
     centerTitle: true,
   ),
   cardTheme: const CardTheme(
@@ -25,12 +26,12 @@ final ThemeData lightTheme = ThemeData(
       color: AppColor.primaryTextColor,
     ),
     titleMedium: TextStyle(
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: FontWeight.bold,
       color: AppColor.primaryTextColor,
     ),
     titleSmall: TextStyle(
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: FontWeight.bold,
       color: AppColor.primaryTextColor,
     ),
@@ -40,12 +41,12 @@ final ThemeData lightTheme = ThemeData(
       color: AppColor.secondaryTextColor,
     ),
     labelMedium: TextStyle(
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: FontWeight.normal,
       color: AppColor.secondaryTextColor,
     ),
     labelSmall: TextStyle(
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: FontWeight.normal,
       color: AppColor.secondaryTextColor,
     ),
@@ -55,12 +56,12 @@ final ThemeData lightTheme = ThemeData(
       color: AppColor.primaryTextColor,
     ),
     bodyMedium: TextStyle(
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: FontWeight.normal,
       color: AppColor.primaryTextColor,
     ),
     bodySmall: TextStyle(
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: FontWeight.normal,
       color: AppColor.primaryTextColor,
     ),
