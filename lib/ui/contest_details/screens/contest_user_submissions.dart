@@ -5,7 +5,9 @@ import 'package:cflytics/providers/secure_storage_provider.dart';
 import 'package:cflytics/utils/colors.dart';
 import 'package:cflytics/utils/constants.dart';
 import 'package:cflytics/utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ContestUserSubmissionsScreen extends ConsumerWidget {
@@ -41,27 +43,28 @@ class ContestUserSubmissionsScreen extends ConsumerWidget {
             Text(
               "${handle}'s Submissions",
               style: textTheme.bodyLarge,
+              textAlign: TextAlign.center,
             ),
-            getUserContestSubmissions.when(
-              data: (data) {
-                if (data == null) {
-                  return const Text("NULL value received");
-                }
-                return Expanded(
-                  child: ContestSubmissionsListWidget(
+            Flexible(
+              child: getUserContestSubmissions.when(
+                data: (data) {
+                  if (data == null) {
+                    return const Text("NULL value received");
+                  }
+                  return ContestSubmissionsListWidget(
                     data,
                     scrollController: scrollController,
-                  ),
-                );
-              },
-              loading: () {
-                return const Center(child: CircularProgressIndicator());
-              },
-              error: (error, stackTrace) {
-                return const Center(
-                  child: Text("Failed"),
-                );
-              },
+                  );
+                },
+                loading: () {
+                  return const Center(child: CircularProgressIndicator());
+                },
+                error: (error, stackTrace) {
+                  return const Center(
+                    child: Text("Failed"),
+                  );
+                },
+              ),
             ),
           ],
         );
@@ -93,7 +96,7 @@ class ContestSubmissionsListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return ListView.builder(
-      // controller: scrollController,
+      controller: scrollController,
       itemCount: submissionsList.length,
       itemBuilder: (context, index) {
         return ContestUserSubmissionCard(submissionsList[index]);

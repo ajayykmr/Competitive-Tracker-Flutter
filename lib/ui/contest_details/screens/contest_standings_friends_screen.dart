@@ -67,7 +67,5 @@ class ContestStandingsFriendsScreen extends ConsumerWidget {
         }),
       ],
     );
-
-    return const Center(child: Text("EMPTY BODY"));
   }
 }
