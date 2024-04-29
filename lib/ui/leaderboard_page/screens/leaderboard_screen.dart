@@ -1,40 +1,26 @@
-import 'package:cflytics/api/services.dart';
-import 'package:cflytics/models/return_objects/user.dart';
+import 'package:cflytics/providers/api_provider.dart';
 import 'package:cflytics/ui/home_page/screens/friends_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LeaderBoardScreen extends StatelessWidget {
+class LeaderBoardScreen extends ConsumerWidget {
   const LeaderBoardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Center(
-          child: Text("LeaderBoard",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 28,
-            ),
-          ),
-        ),
+  Widget build(BuildContext context, WidgetRef ref) {
 
-        Expanded(
-          child: FutureBuilder<List<User>?> (
-            future: ApiServices().getLeaderBoard(),
-            builder: (context, snapshot) {
-              if(snapshot.connectionState == ConnectionState.done && snapshot.hasData){
-                return UsersListWidget(snapshot.data!);
-              } else if (snapshot.connectionState == ConnectionState.waiting){
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                return const Center(child: Text("Failed"),);
-              }
-            },
-          ),
-        )
-      ],
+    final leaderBoard = ref.watch(getLeaderBoardProvider);
+    return leaderBoard.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => const Center(child: Text("Failed"),),
+      data: (data) {
+        if (data==null) {
+          return const Center(child: Text("No Data Received"),);
+        } else {
+          return UsersListWidget(data);
+        }
+      },
     );
+
   }
 }

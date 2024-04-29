@@ -1,5 +1,5 @@
 class Constants {
-  Constants._();
+  Constants._();  //private constructor
 
   static const double pageTitleSize = 24;
   static String handleKey = "handle";

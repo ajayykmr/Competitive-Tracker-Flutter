@@ -1,54 +1,52 @@
-import 'package:cflytics/api/services.dart';
 import 'package:cflytics/models/return_objects/rating_changes.dart';
+import 'package:cflytics/providers/api_provider.dart';
 import 'package:cflytics/ui/contest_details/contest_details_scaffold.dart';
 import 'package:cflytics/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/colors.dart';
-import '../../../utils/constants.dart';
 
-class RatingHistoryScreen extends StatefulWidget {
-  String handle;
-  RatingHistoryScreen(this.handle, {super.key});
+class RatingHistoryScreen extends ConsumerWidget {
+  final String handle;
 
-  @override
-  State<RatingHistoryScreen> createState() => _RatingHistoryScreenState();
-}
-
-class _RatingHistoryScreenState extends State<RatingHistoryScreen>
-    with AutomaticKeepAliveClientMixin<RatingHistoryScreen> {
-  @override
-  bool get wantKeepAlive => true;
+  const RatingHistoryScreen(this.handle, {super.key});
 
   @override
-  Widget build(BuildContext context) {
-    super.build(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
+    final userRatingHistory = ref.watch(GetUserRatingHistoryProvider(handle));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Rating Changes",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: Constants.pageTitleSize,
-          ),
+          style: textTheme.bodyLarge,
         ),
-        Expanded(
-          child: FutureBuilder<List<RatingChanges>?>(
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                return RatingChangesListWidget(snapshot.data!.reversed.toList());
-              } else {
-                const Text("Please Try Again");
-              }
-
-              return const Text("PLease Try Again");
-            },
-            future: ApiServices().getUserRatingHistory(widget.handle),
-          ),
+        userRatingHistory.when(
+          data: (ratingChangeList) {
+            if (ratingChangeList == null) {
+              return const Center(
+                child: Text("NULL values received"),
+              );
+            }
+            return Expanded(
+              child:
+                  RatingChangesListWidget(ratingChangeList.reversed.toList()),
+            );
+          },
+          loading: () {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+          error: (error, stack) {
+            return const Center(
+              child: Text("Error in retrieving data"),
+            );
+          },
         ),
       ],
     );
@@ -65,119 +63,171 @@ class RatingChangesListWidget extends StatelessWidget {
     return ListView.builder(
       itemCount: ratingChangeList.length,
       itemBuilder: (context, index) {
-        return Card(
-          elevation: 0,
-          color: ((ratingChangeList[index].newRating! -
-                          ratingChangeList[index].oldRating! >=
-                      0)
-                  ? AppColor.plus
-                  : AppColor.minus)
-              .withOpacity(0.3),
-          child: ListTile(
-            onTap: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ContestDetailsScaffold(
-                        ratingChangeList[index].contestId!),
-                  ));
-            },
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 8,
-            ),
-            leading: Container(
-              padding: const EdgeInsets.only(right: 8.0),
-              decoration: const BoxDecoration(
-                  border: Border(
-                      right: BorderSide(width: 1.0, color: Colors.black26))),
-              child: Text(
-                (ratingChangeList.length - index).toString(),
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            title: Text(
-              ratingChangeList[index].contestName.toString(),
-              style: const TextStyle(
-                color: AppColor.blackText,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-            subtitle: Column(
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      "Rank: ",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColor.blackText,
-                      ),
-                    ),
-                    Text(
-                      ratingChangeList[index].rank.toString(),
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: AppColor.blackText,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      "Date: ",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColor.blackText,
-                      ),
-                    ),
-                    Text(
-                      "${Utils.getDateStringFromEpochSeconds(ratingChangeList[index]
-                          .ratingUpdateTimeSeconds!)} | ${Utils.getTimeStringFromEpochSeconds(ratingChangeList[index]
-                          .ratingUpdateTimeSeconds!)}",
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: AppColor.blackText,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            trailing: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  ratingChangeList[index].newRating.toString(),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color:
-                        Utils.ratingColor(ratingChangeList[index].newRating!),
-                  ),
-                ),
-                Text(
-                  Utils.ratingDelta(ratingChangeList[index].newRating!,
-                      ratingChangeList[index].oldRating!),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: (ratingChangeList[index].newRating! -
-                                ratingChangeList[index].oldRating! >=
-                            0)
-                        ? AppColor.plus
-                        : AppColor.minus,
-                  ),
-                ),
-              ],
+        final ratingChange = ratingChangeList[index];
+        return RatingChangeCard(
+            ratingChange: ratingChange,
+            position: ratingChangeList.length - index);
+      },
+    );
+  }
+}
+
+class RatingChangeCard extends StatelessWidget {
+  final RatingChanges ratingChange;
+  final int position;
+
+  const RatingChangeCard(
+      {super.key, required this.ratingChange, required this.position});
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ContestDetailsScaffold(
+              ratingChange.contestId!,
             ),
           ),
         );
       },
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          border: Border(
+            left: BorderSide(
+              width: 10.0,
+              color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+            right: BorderSide(
+              width: 1.0,
+              color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+            top: BorderSide(
+              width: 1.0,
+              color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+            bottom: BorderSide(
+              width: 1.0,
+              color: (ratingChange.newRating! - ratingChange.oldRating! >= 0)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    decoration: const BoxDecoration(
+                        // border: Border(
+                        //   right: BorderSide(width: 1.0, color: AppColor.secondaryTextColor),
+                        // ),
+                        ),
+                    child: Text(
+                      position.toString(),
+                      style: textTheme.bodySmall,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ratingChange.contestName!,
+                            style: textTheme.bodySmall,
+                          ),
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: "Rank: ",
+                                    style: textTheme.labelSmall),
+                                TextSpan(
+                                  text: ratingChange.rank!.toString(),
+                                  style: textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text.rich(
+                            maxLines: 1,
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: "Date: ",
+                                    style: textTheme.labelSmall),
+                                TextSpan(
+                                  text: Utils.getDateStringFromEpochSeconds(
+                                      ratingChange.ratingUpdateTimeSeconds!),
+                                  style: textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      ratingChange.newRating!.toString(),
+                      style: textTheme.titleMedium?.copyWith(
+                        color: Utils.ratingColor(ratingChange.newRating!),
+                      ),
+                    ),
+                    Text(
+                      Utils.ratingDelta(
+                          ratingChange.newRating!, ratingChange.oldRating!),
+                      style: textTheme.titleSmall?.copyWith(
+                        color: (ratingChange.newRating! -
+                                    ratingChange.oldRating! >=
+                                0)
+                            ? AppColor.plus
+                            : AppColor.minus,
+                        // fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,7 +1,8 @@
+import 'package:cflytics/utils/theme_data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'ui/base_scaffold.dart';
-import 'utils/colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'ui/common/base_scaffold.dart';
 
 extension CapitalizedExtension on String {
   String capitalizeFirstLetter() {
@@ -12,31 +13,52 @@ extension CapitalizedExtension on String {
   }
 }
 
-//codemagic automatic build test
+
 void main() {
-  runApp(const MyApp());
+
+  final runnableApp = _buildRunnableApp(
+    isWeb: kIsWeb,
+    webAppWidth: 425.0,
+    app: ProviderScope(child: const MyApp()),
+  );
+  runApp(runnableApp);
+
+  // runApp(
+  //   const ProviderScope(
+  //     child: MyApp(),
+  //   ),
+  // );
 }
 
-class MyApp extends StatefulWidget {
+Widget _buildRunnableApp({
+  required bool isWeb,
+  required double webAppWidth,
+  required Widget app,
+}) {
+  if (!isWeb) {
+    return app;
+  }
+
+  return Center(
+    child: ClipRect(
+      child: SizedBox(
+        width: webAppWidth,
+        child: app,
+      ),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Competitive Tracker',
-      theme: ThemeData(
-        primaryColor: AppColor.primary,
-        // colorSchemeSeed: AppColor.primary,
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primary),
-        useMaterial3: true,
-      ),
+      theme: lightTheme,
       home: const BaseScaffold(),
-      // home: Scaffold(appBar: MyAppBar(), body: Test()),
     );
   }
 }
+

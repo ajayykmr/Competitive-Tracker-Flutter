@@ -1,48 +1,47 @@
-import 'package:cflytics/api/services.dart';
 import 'package:cflytics/models/return_objects/submission.dart';
+import 'package:cflytics/providers/api_provider.dart';
 import 'package:cflytics/utils/colors.dart';
 import 'package:cflytics/utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SubmissionsListScreen extends StatefulWidget {
-  String handle;
-  SubmissionsListScreen(this.handle, {super.key});
+class SubmissionsListScreen extends ConsumerWidget {
 
-  @override
-  State<SubmissionsListScreen> createState() => _SubmissionsListScreenState();
-}
-
-class _SubmissionsListScreenState extends State<SubmissionsListScreen> with AutomaticKeepAliveClientMixin<SubmissionsListScreen>{
-  @override
-  bool get wantKeepAlive => true;
+  final String handle;
+  const SubmissionsListScreen(this.handle, {super.key});
 
   @override
-  Widget build(BuildContext context) {
-    super.build(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
+    final getUserAllSubmissions =
+        ref.watch(GetUserAllSubmissionsProvider(handle));
     return Column(
+
       children: [
-        const Text(
+        Text(
           "My Submissions",
-          style: TextStyle(
-            fontSize: 28,
-          ),
+          style: textTheme.bodyLarge,
         ),
         Expanded(
-          child: FutureBuilder<List<Submission>?>(
-            future: ApiServices().getUserAllSubmissions(widget.handle),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                return SubmissionsListWidget(snapshot.data!);
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
+          child: getUserAllSubmissions.when(
+            data: (submissionsList) {
+              if (submissionsList == null) {
                 return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                return const Center(
-                  child: Text("Failed"),
+                  child: Text("NULL values received"),
                 );
               }
+              return SubmissionsListWidget(submissionsList);
+            },
+            loading: () {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+            error: (error, stack) {
+              return const Center(
+                child: Text("Error in retrieving data"),
+              );
             },
           ),
         ),
@@ -64,62 +63,141 @@ class SubmissionsListWidget extends StatelessWidget {
     return ListView.builder(
       itemCount: submissionsList.length,
       itemBuilder: (context, index) {
-        return Card(
-          elevation: 0,
-          color: ((submissionsList[index].verdict=="OK") ? AppColor.plus : AppColor.minus).withOpacity(0.3),
-          child: ListTile(
-            onTap: () async {
-              Utils.openSubmission(submissionsList[index]);
-            },
-            isThreeLine: false,
-            contentPadding: const EdgeInsets.all(10),
-            title: Text(
-              submissionsList[index].problem!.name!,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        final submission = submissionsList[index];
+        return SubmissionCard(submission: submission);
+      },
+    );
+  }
+
+
+}
+
+class SubmissionCard extends StatelessWidget {
+  final Submission submission;
+
+  const SubmissionCard({super.key, required this.submission});
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    var submissionPassed = submission.verdict == "OK";
+
+    return InkWell(
+      onTap: () {
+        Utils.openSubmission(submission);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          border: Border(
+            left: BorderSide(
+              width: 10.0,
+              color: (submissionPassed)
+                  ? AppColor.green
+                  : AppColor.red,
             ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  submissionsList[index].id.toString(),
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  "${Utils.getDateStringFromEpochSeconds(submissionsList[index].creationTimeSeconds!)}  ||  ${Utils.getTimeStringFromEpochSeconds(submissionsList[index].creationTimeSeconds!)}",
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ],
+            right: BorderSide(
+              width: 1.0,
+              color: (submissionPassed)
+                  ? AppColor.green
+                  : AppColor.red,
             ),
-            trailing: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  submissionsList[index].verdict!,
-                  style: TextStyle(fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: (submissionsList[index].verdict=="OK")?
-                      AppColor.plus: AppColor.minus,
-                  ),
-                ),
-                Text(
-                  "${(submissionsList[index].memoryConsumedBytes! / 1000000).toStringAsFixed(2)}MB",
-                  style: const TextStyle(fontSize: 12,
-                  ),
-                ),
-                Text(
-                  "${submissionsList[index].timeConsumedMillis}ms",
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ],
+            top: BorderSide(
+              width: 1.0,
+              color: (submissionPassed)
+                  ? AppColor.green
+                  : AppColor.red,
+            ),
+            bottom: BorderSide(
+              width: 1.0,
+              color: (submissionPassed)
+                  ? AppColor.green
+                  : AppColor.red,
             ),
           ),
-        );
-      },
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      submission.problem!.name!,
+                      style: textTheme.bodySmall,
+                    ),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: submission.id.toString(),
+                            style: textTheme.labelSmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text.rich(
+                      maxLines: 1,
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                              text: Utils.getDateStringFromEpochSeconds(
+                                  submission.creationTimeSeconds!),
+                              style: textTheme.labelSmall),
+                          TextSpan(text: " | ", style: textTheme.labelSmall),
+                          TextSpan(
+                              text: Utils.getTimeStringFromEpochSeconds(
+                                  submission.creationTimeSeconds!),
+                              style: textTheme.labelSmall),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      textAlign: TextAlign.end,
+                      Utils.getSubmissionVerdict(submission.verdict!),
+                      style: textTheme.titleSmall?.copyWith(
+                        color: (submissionPassed)
+                            ? AppColor.plus
+                            : AppColor.minus,
+                      ),
+                    ),
+                    Text(
+                        "${(submission.memoryConsumedBytes! / 1000000).toStringAsFixed(2)}MB",
+                        style: textTheme.labelSmall),
+                    Text(
+                      "${submission.timeConsumedMillis}ms",
+                      style: textTheme.labelSmall,
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

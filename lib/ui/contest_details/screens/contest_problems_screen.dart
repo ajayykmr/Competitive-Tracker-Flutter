@@ -1,4 +1,6 @@
 import 'package:cflytics/models/contest_standings.dart';
+import 'package:cflytics/models/return_objects/problem.dart';
+import 'package:cflytics/utils/colors.dart';
 import 'package:cflytics/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -18,47 +20,58 @@ class _ContestProblemsScreenState extends State<ContestProblemsScreen> with Auto
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final textStyle = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
+        Text(
           "Problems",
-          style: TextStyle(
-            fontSize: 24,
-          ),
-        ),
-        const Divider(
-          color: Colors.black26,
+          style: textStyle.bodyLarge,
         ),
         Flexible(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const Divider(
-              color: Colors.black26,
-            ),
+          child: ListView.builder(
             itemCount: widget.contestStandings.result!.problems!.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () async {
-                  Utils.openProblem(widget.contestStandings.result!.problems![index]);
-                },
-                leading: Text(
-                  "${widget.contestStandings.result!.problems![index].index!}.",
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                title: Text(
-                  widget.contestStandings.result!.problems![index].name!,
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              );
+              return ProblemCard(widget.contestStandings.result!.problems![index]);
             },
           ),
         )
       ],
+    );
+  }
+}
+
+class ProblemCard extends StatelessWidget {
+  final Problem problem;
+  const ProblemCard(this.problem, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Utils.openProblem(problem);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: AppColor.primary,
+          ),
+        ),
+
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Text("${problem.index!}. ", style: Theme.of(context).textTheme.labelSmall),
+              Text(problem.name!, style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
