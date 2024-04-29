@@ -27,7 +27,7 @@ class ContestUserSubmissionsScreen extends ConsumerWidget {
 
 
         if (handle == null || handle.isEmpty) {
-          return const Center(child: Text("Please Enter a handle name"));
+          return Center(child: Text("Please Enter a handle name", style:textTheme.bodySmall,));
         }
         final getUserContestSubmissions = ref.watch(
           getUserContestSubmissionsProvider(
@@ -76,7 +76,6 @@ class ContestUserSubmissionsScreen extends ConsumerWidget {
       },
     );
 
-    return const Center(child: Text("EMPTY BODY"));
   }
 }
 
@@ -92,10 +91,9 @@ class ContestSubmissionsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme;
 
     return ListView.builder(
-      controller: scrollController,
+      // controller: scrollController,
       itemCount: submissionsList.length,
       itemBuilder: (context, index) {
         return ContestUserSubmissionCard(submissionsList[index]);

@@ -145,24 +145,22 @@ class StandingsTable extends StatelessWidget {
               enableDrag: true,
               isDismissible: true,
               isScrollControlled: true,
-              backgroundColor: AppColor.secondary,
+              backgroundColor: AppColor.scaffoldBackground,
               context: context,
               builder: (context) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DraggableScrollableSheet(
-                    initialChildSize: 0.5,
-                    minChildSize: 0.1,
-                    maxChildSize: 0.95,
-                    expand: false,
-                    builder: (context, scrollController) =>
-                        ContestUserSubmissionsScreen(
+                return DraggableScrollableSheet(
+                  initialChildSize: 0.5,
+                  minChildSize: 0.1,
+                  maxChildSize: 0.95,
+                  expand: false,
+                  builder: (context, scrollController) {
+                    return ContestUserSubmissionsScreen(
                       contestStandings,
                       givenHandle: contestStandings
                           .result!.rows![INDEX].party!.members![0].handle,
                       scrollController: scrollController,
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
             );

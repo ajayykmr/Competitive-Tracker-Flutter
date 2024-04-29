@@ -2,6 +2,7 @@ import 'package:cflytics/main.dart';
 import 'package:cflytics/models/return_objects/user.dart';
 import 'package:cflytics/providers/api_provider.dart';
 import 'package:cflytics/ui/common/app_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +17,13 @@ class FriendsListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textStyle = Theme.of(context).textTheme;
+    return Column(
+      children: [
+        Text("Friends", style: textStyle.bodyLarge,),
+        Expanded(child: Center(child: Text("Coming Soon...", style: textStyle.labelLarge,),)),
+      ],
+    );
     final friendsList =
         ref.watch(GetFriendsListProvider(handle, apiKey, apiSecret));
     return Column(

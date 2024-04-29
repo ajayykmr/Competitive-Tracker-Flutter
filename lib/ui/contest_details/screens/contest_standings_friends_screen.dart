@@ -15,8 +15,10 @@ class ContestStandingsFriendsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final storage = ref.watch(secureStorageReadProvider);
 
-    return storage.when(
-        data: (data) {
+    return Column(
+      children: [
+        Text("Friends Standings", style: Theme.of(context).textTheme.bodyLarge,),
+        storage.when(data: (data) {
           final myHandle = data[Constants.handleKey];
           final apiKey = data[Constants.apiKeyKey];
           final apiSecret = data[Constants.apiSecretKey];
@@ -57,14 +59,14 @@ class ContestStandingsFriendsScreen extends ConsumerWidget {
               return const Center(child: CircularProgressIndicator());
             },
           );
-        },
-        error: (error, stackTrace) {
+        }, error: (error, stackTrace) {
           return const Text(
-            "Please try again.\n Also, ensure that you have entered API keys");
-        },
-        loading: () {
+              "Please try again.\n Also, ensure that you have entered API keys");
+        }, loading: () {
           return const Center(child: CircularProgressIndicator());
-        });
+        }),
+      ],
+    );
 
     return const Center(child: Text("EMPTY BODY"));
   }

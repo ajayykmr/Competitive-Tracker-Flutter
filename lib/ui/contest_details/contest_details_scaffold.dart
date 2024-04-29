@@ -32,6 +32,7 @@ class _ContestDetailsScaffoldState
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     final contestStandings =
         ref.watch(getContestStandingsProvider(widget.contestId));
 
@@ -53,7 +54,7 @@ class _ContestDetailsScaffoldState
         body: contestStandings.when(
           data: (data) {
             if (data == null) {
-              return const Text("NULL value received");
+              return Text("NULL value received", style: textStyle.bodyLarge,);
             }
 
             Future.delayed(const Duration(milliseconds: 0), () {
@@ -69,8 +70,8 @@ class _ContestDetailsScaffoldState
             return const Center(child: CircularProgressIndicator());
           },
           error: (error, stackTrace) {
-            return const Center(
-              child: Text("Error:"),
+            return Center(
+              child: Text("Error:", style: textStyle.bodyLarge),
             );
           },
         ),
