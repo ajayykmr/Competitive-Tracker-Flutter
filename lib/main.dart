@@ -1,4 +1,5 @@
 import 'package:cflytics/utils/theme_data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'ui/common/base_scaffold.dart';
@@ -12,10 +13,38 @@ extension CapitalizedExtension on String {
   }
 }
 
+
 void main() {
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
+
+  final runnableApp = _buildRunnableApp(
+    isWeb: kIsWeb,
+    webAppWidth: 425.0,
+    app: ProviderScope(child: const MyApp()),
+  );
+  runApp(runnableApp);
+
+  // runApp(
+  //   const ProviderScope(
+  //     child: MyApp(),
+  //   ),
+  // );
+}
+
+Widget _buildRunnableApp({
+  required bool isWeb,
+  required double webAppWidth,
+  required Widget app,
+}) {
+  if (!isWeb) {
+    return app;
+  }
+
+  return Center(
+    child: ClipRect(
+      child: SizedBox(
+        width: webAppWidth,
+        child: app,
+      ),
     ),
   );
 }

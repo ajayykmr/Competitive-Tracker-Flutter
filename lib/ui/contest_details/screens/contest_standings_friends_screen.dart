@@ -24,16 +24,20 @@ class ContestStandingsFriendsScreen extends ConsumerWidget {
           final apiSecret = data[Constants.apiSecretKey];
 
           if (myHandle == null || myHandle.isEmpty) {
-            return const Center(
-                child: Text(
-                    "Please enter your handle name to display friends ranking"));
+            return const Expanded(
+              child: Center(
+                  child: Text(
+                      "Please enter your handle name to display friends ranking")),
+            );
           } else if (apiSecret == null ||
               apiKey == null ||
               apiSecret.isEmpty ||
               apiKey.isEmpty) {
-            return const Center(
-                child: Text(
-                    "Please enter API Key and API Secret to access friends data"));
+            return const Expanded(
+              child: Center(
+                  child: Text(
+                      "Please enter API Key and API Secret to access friends data")),
+            );
           }
           final getContestStandingsFriends = ref.watch(
               GetContestStandingsFriendsProvider(myHandle, apiKey, apiSecret,
@@ -60,8 +64,10 @@ class ContestStandingsFriendsScreen extends ConsumerWidget {
             },
           );
         }, error: (error, stackTrace) {
-          return const Text(
-              "Please try again.\n Also, ensure that you have entered API keys");
+          return const Center(
+            child: Text(
+                "Please try again.\n Also, ensure that you have entered API keys"),
+          );
         }, loading: () {
           return const Center(child: CircularProgressIndicator());
         }),

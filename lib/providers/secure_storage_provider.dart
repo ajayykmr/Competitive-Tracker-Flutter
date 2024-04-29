@@ -11,6 +11,11 @@ FlutterSecureStorage secureStorage(SecureStorageRef ref) => const FlutterSecureS
 @riverpod
 Future<Map<String, String>> secureStorageRead(SecureStorageReadRef ref) async {
   final storage = ref.watch(secureStorageProvider);
+
+  final handle = await storage.read(key: Constants.handleKey);
+  if (handle==null || handle.isEmpty){
+    ref.read(SecureStorageWriteProvider("tourist", "", ""));
+  }
   ref.keepAlive();
   return storage.readAll();
 }

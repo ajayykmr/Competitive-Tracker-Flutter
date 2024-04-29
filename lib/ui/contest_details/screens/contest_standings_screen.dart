@@ -73,7 +73,7 @@ class StandingsTable extends StatelessWidget {
         fixedLeftColumns: 1,
         headingRowColor: MaterialStateColor.resolveWith(
             (states) => AppColor.tableHeadingRowColor),
-        dataRowHeight: 55,
+        dataRowHeight: 60,
         fixedColumnsColor: AppColor.secondary,
         minWidth: 700,
         lmRatio: 2,
