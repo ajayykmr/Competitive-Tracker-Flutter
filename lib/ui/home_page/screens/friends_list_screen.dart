@@ -2,7 +2,6 @@ import 'package:cflytics/main.dart';
 import 'package:cflytics/models/return_objects/user.dart';
 import 'package:cflytics/providers/api_provider.dart';
 import 'package:cflytics/ui/common/app_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -67,26 +66,16 @@ class UsersListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      // separatorBuilder: (context, index) {
-      //   return Divider(
-      //     color: Colors.black26,
-      //     indent: 75,
-      //     // endIndent: 10,
-      //   );
-      // },
 
       itemCount: userList.length,
       itemBuilder: (context, index) {
         return Card(
           elevation: 0,
           margin: const EdgeInsets.only(top: 4),
-          // color: Utils.ratingColor(userList[index].rating!).withOpacity(0.05),
 
           child: ListTile(
             onTap: () async {
-              // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-              // )
-              // );
+              
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
                   return Scaffold(

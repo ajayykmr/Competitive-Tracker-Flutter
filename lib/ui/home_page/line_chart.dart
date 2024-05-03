@@ -50,8 +50,8 @@ class _RatingLineChartState extends State<RatingLineChart> {
         return Container();
       }
       return SideTitleWidget(
-        child: Text(value.toStringAsFixed(0), style: textStyle.bodySmall?.copyWith(fontSize: 14),),
         axisSide: meta.axisSide,
+        child: Text(value.toStringAsFixed(0), style: textStyle.bodySmall?.copyWith(fontSize: 14),),
         // space: 10,
       );
     }
@@ -146,7 +146,6 @@ class _RatingLineChartState extends State<RatingLineChart> {
       ],
     );
 
-    print(timeInterval);
     return LineChart(
       lineChartData,
     );

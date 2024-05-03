@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'ui/common/base_scaffold.dart';
 
 extension CapitalizedExtension on String {
+
   String capitalizeFirstLetter() {
-    if (this.length == 0) {
+    if (length == 0) {
       return "";
+    } else {
+      return substring(0, 1).toUpperCase() + substring(1).toLowerCase();
     }
-    return this.substring(0, 1).toUpperCase() + this.substring(1).toLowerCase();
   }
 }
 
@@ -19,9 +21,9 @@ void main() {
   final runnableApp = _buildRunnableApp(
     isWeb: kIsWeb,
     webAppWidth: 425.0,
-    app: ProviderScope(child: const MyApp()),
+    app: MyApp(),
   );
-  runApp(runnableApp);
+  runApp(ProviderScope(child: runnableApp));
 
   // runApp(
   //   const ProviderScope(

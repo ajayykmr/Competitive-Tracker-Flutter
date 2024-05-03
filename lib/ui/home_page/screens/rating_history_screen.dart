@@ -196,33 +196,39 @@ class RatingChangeCard extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
-              child: Container(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      ratingChange.newRating!.toString(),
-                      style: textTheme.titleMedium?.copyWith(
-                        color: Utils.ratingColor(ratingChange.newRating!),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        ratingChange.newRating!.toString(),
+                        style: textTheme.titleMedium?.copyWith(
+                          color: Utils.ratingColor(ratingChange.newRating!),
+                        ),
                       ),
-                    ),
-                    Text(
-                      Utils.ratingDelta(
-                          ratingChange.newRating!, ratingChange.oldRating!),
-                      style: textTheme.titleSmall?.copyWith(
-                        color: (ratingChange.newRating! -
-                                    ratingChange.oldRating! >=
-                                0)
-                            ? AppColor.plus
-                            : AppColor.minus,
-                        // fontStyle: FontStyle.italic,
+                      Text(
+                        Utils.ratingDelta(
+                            ratingChange.newRating!, ratingChange.oldRating!),
+                        style: textTheme.titleSmall?.copyWith(
+                          color: (ratingChange.newRating! -
+                                      ratingChange.oldRating! >=
+                                  0)
+                              ? AppColor.plus
+                              : AppColor.minus,
+                          // fontStyle: FontStyle.italic,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                  const Icon(Icons.arrow_right_rounded, color: AppColor.primaryTextColor,)
+                ],
+
               ),
             )
           ],

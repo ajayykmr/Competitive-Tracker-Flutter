@@ -62,14 +62,20 @@ class ProblemCard extends StatelessWidget {
           ),
         ),
 
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Text("${problem.index!}. ", style: Theme.of(context).textTheme.labelSmall),
-              Text(problem.name!, style: Theme.of(context).textTheme.bodySmall),
-            ],
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Text("${problem.index!}. ", style: Theme.of(context).textTheme.labelSmall),
+                  Text(problem.name!, style: Theme.of(context).textTheme.bodySmall),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_right_rounded, color: AppColor.primaryTextColor,)
+          ],
         ),
       ),
     );

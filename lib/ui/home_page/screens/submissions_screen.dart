@@ -2,7 +2,6 @@ import 'package:cflytics/models/return_objects/submission.dart';
 import 'package:cflytics/providers/api_provider.dart';
 import 'package:cflytics/utils/colors.dart';
 import 'package:cflytics/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -168,31 +167,36 @@ class SubmissionCard extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
-              child: Container(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      textAlign: TextAlign.end,
-                      Utils.getSubmissionVerdict(submission.verdict!),
-                      style: textTheme.titleSmall?.copyWith(
-                        color: (submissionPassed)
-                            ? AppColor.plus
-                            : AppColor.minus,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        textAlign: TextAlign.end,
+                        Utils.getSubmissionVerdict(submission.verdict!),
+                        style: textTheme.titleSmall?.copyWith(
+                          color: (submissionPassed)
+                              ? AppColor.plus
+                              : AppColor.minus,
+                        ),
                       ),
-                    ),
-                    Text(
-                        "${(submission.memoryConsumedBytes! / 1000000).toStringAsFixed(2)}MB",
-                        style: textTheme.labelSmall),
-                    Text(
-                      "${submission.timeConsumedMillis}ms",
-                      style: textTheme.labelSmall,
-                    ),
-                  ],
-                ),
+                      Text(
+                          "${(submission.memoryConsumedBytes! / 1000000).toStringAsFixed(2)}MB",
+                          style: textTheme.labelSmall),
+                      Text(
+                        "${submission.timeConsumedMillis}ms",
+                        style: textTheme.labelSmall,
+                      ),
+                    ],
+                  ),
+                  Icon(Icons.arrow_right_rounded, color: AppColor.primaryTextColor,)
+                ],
               ),
             )
           ],

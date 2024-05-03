@@ -41,7 +41,7 @@ class ContestUserSubmissionsScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "${handle}'s Submissions",
+              "$handle's Submissions",
               style: textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
@@ -150,10 +150,15 @@ class ContestUserSubmissionCard extends StatelessWidget {
               "${submission.problem!.index}. ${submission.problem!.name}",
               style: textStyle.bodyMedium,
             ),
-            Text(
-              Utils.getTimeStringFromSeconds(
-                  submission.relativeTimeSeconds!),
-              style: textStyle.labelMedium,
+            Row(
+              children: [
+                Text(
+                  Utils.getTimeStringFromSeconds(
+                      submission.relativeTimeSeconds!),
+                  style: textStyle.labelMedium,
+                ),
+                const Icon(Icons.arrow_right_rounded, color: AppColor.primaryTextColor,)
+              ],
             )
           ],
         ),
