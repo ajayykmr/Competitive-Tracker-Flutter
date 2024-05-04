@@ -9,6 +9,25 @@ final ThemeData lightTheme = ThemeData(
     secondary: AppColor.secondary,
   ),
   scaffoldBackgroundColor: AppColor.scaffoldBackground,
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      textStyle: MaterialStateProperty.all(
+        const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: AppColor.primaryTextColor,
+        ),
+      ),
+      backgroundColor: MaterialStateProperty.all(AppColor.primary),
+      foregroundColor: MaterialStateProperty.all(AppColor.primaryTextColor),
+      padding: MaterialStateProperty.all(
+        const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 32,
+        ),
+      ),
+    ),
+  ),
   appBarTheme: const AppBarTheme(
     color: AppColor.primary,
     // color: AppColor.scaffoldBackground,

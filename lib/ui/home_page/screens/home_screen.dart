@@ -47,7 +47,7 @@ class UserDetails extends ConsumerWidget {
         TopContainer(
             imagePath: user.titlePhoto!,
             name:
-                "${user.firstName!.capitalizeFirstLetter()} ${user.lastName!.capitalizeFirstLetter()}"),
+                "${user.firstName?.capitalizeFirstLetter()} ${user.lastName?.capitalizeFirstLetter()}"),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
@@ -63,7 +63,7 @@ class UserDetails extends ConsumerWidget {
                     TextSpan(
                         text: "Institution: ", style: textStyle.labelMedium),
                     TextSpan(
-                        text: user.organization!, style: textStyle.titleMedium)
+                        text: user.organization ?? "--", style: textStyle.titleMedium)
                   ],
                 ),
               ),
@@ -77,7 +77,7 @@ class UserDetails extends ConsumerWidget {
                       style: textStyle.labelMedium,
                     ),
                     TextSpan(
-                        text: "${user.city!}, ${user.country!}",
+                        text: "${user.city!=null ? "${user.city}, " : ""}${user.country ?? ""}",
                         style: textStyle.titleMedium)
                   ],
                 ),
@@ -114,7 +114,7 @@ class UserDetails extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          user.maxRating!.toString(),
+                          user.maxRating.toString(),
                           style: textStyle.titleMedium?.copyWith(
                             color: Utils.ratingColor(user.maxRating!),
                           ),
@@ -141,15 +141,15 @@ class UserDetails extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          user.rating!.toString(),
+                          user.rating.toString(),
                           style: textStyle.titleMedium?.copyWith(
-                            color: Utils.ratingColor(user.rating!),
+                            color: Utils.ratingColor(user.rating ?? 0),
                           ),
                         ),
                         Text(
                           user.rank.toString().capitalizeFirstLetter(),
                           style: textStyle.titleMedium?.copyWith(
-                            color: Utils.ratingColor(user.rating!),
+                            color: Utils.ratingColor(user.rating ?? 0),
                           ),
                         ),
                       ],
@@ -174,7 +174,7 @@ class UserDetails extends ConsumerWidget {
                   children: [
                     TextSpan(text: "Friends: ", style: textStyle.labelMedium),
                     TextSpan(
-                        text: user.friendOfCount!.toString(),
+                        text: (user.friendOfCount ?? 0).toString(),
                         style: textStyle.titleMedium)
                   ],
                 ),
@@ -201,11 +201,11 @@ class UserDetails extends ConsumerWidget {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: "Contribution: ",
+                      text: "Contributions: ",
                       style: textStyle.labelMedium,
                     ),
                     TextSpan(
-                        text: user.contribution!.toString(),
+                        text: (user.contribution ?? 0).toString(),
                         style: textStyle.titleMedium)
                   ],
                 ),
