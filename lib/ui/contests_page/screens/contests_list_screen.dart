@@ -12,21 +12,17 @@ class ContestsListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contestList = ref.watch(getContestsListProvider);
+    final textStyle = Theme.of(context).textTheme;
+
     return Column(
       children: [
-        const Center(
-          child: Text(
-            "Contests",
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+        Center(
+          child: Text("Contests", style: textStyle.bodyLarge),
         ),
         contestList.when(
           data: (data) {
             if (data == null) {
-              return const Text("NULL value received");
+              return Center(child: const Text("NULL value received"));
             }
             return Expanded(
               child: ContestListWidget(data),
@@ -58,40 +54,145 @@ class ContestListWidget extends StatelessWidget {
       child: ListView.builder(
         itemCount: contestList.length,
         itemBuilder: (context, index) {
-          bool isContestUpcoming = Utils.getDateTimeFromEpochSeconds(
-                  contestList[index].startTimeSeconds!)
-              .isAfter(DateTime.now());
-          return Card(
-            color: isContestUpcoming
-                ? AppColor.secondary.withOpacity(0.75)
-                : AppColor.secondary,
-            // color: AppColor.secondary,
-            child: ListTile(
-              onTap: () {
-                if (!isContestUpcoming) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ContestDetailsScaffold(contestList[index].id!),
-                  ));
-                }
-              },
-              title: Text(
-                contestList[index].name.toString(),
-              ),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(Utils.getDateStringFromEpochSeconds(
-                      contestList[index].startTimeSeconds!)),
-                  Text(
-                    Utils.getTimeStringFromEpochSeconds(
-                        contestList[index].startTimeSeconds!),
-                  )
-                ],
+          return ContestCard(contest: contestList[index]);
+        },
+      ),
+    );
+  }
+}
+
+class ContestCard extends StatelessWidget {
+  final Contest contest;
+
+  const ContestCard({super.key, required this.contest});
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    // final bool isUpcomingContest = Utils.getDateTimeFromEpochSeconds(contest.startTimeSeconds!).isAfter(DateTime.now());
+    final bool isUpcomingContest = contest.phase == "BEFORE";
+    return InkWell(
+      onTap: () {
+        if (!isUpcomingContest) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ContestDetailsScaffold(
+                contest.id!,
               ),
             ),
           );
-        },
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          border: Border(
+            left: BorderSide(
+              width: 10.0,
+              color: isUpcomingContest
+                  ? AppColor.secondaryTextColor
+                  : AppColor.primary,
+            ),
+            right: BorderSide(
+              width: 1.0,
+              color: isUpcomingContest
+                  ? AppColor.secondaryTextColor
+                  : AppColor.primary,
+            ),
+            top: BorderSide(
+              width: 1.0,
+              color: isUpcomingContest
+                  ? AppColor.secondaryTextColor
+                  : AppColor.primary,
+            ),
+            bottom: BorderSide(
+              width: 1.0,
+              color: isUpcomingContest
+                  ? AppColor.secondaryTextColor
+                  : AppColor.primary,
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 4,
+              child: Container(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      contest.name!,
+                      style: textTheme.bodySmall,
+                    ),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(text: "Type: ", style: textTheme.labelSmall),
+                          TextSpan(
+                            text: contest.type,
+                            style: textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text.rich(
+                      maxLines: 1,
+                      TextSpan(
+                        children: [
+                          TextSpan(text: "ID: ", style: textTheme.labelSmall),
+                          TextSpan(
+                            text: contest.id.toString(),
+                            style: textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                          Utils.getDateStringFromEpochSeconds(
+                              contest.startTimeSeconds!),
+                          style: textTheme.bodySmall),
+                      Text(
+                        Utils.getTimeStringFromEpochSeconds(
+                            contest.startTimeSeconds!),
+                        style: textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                  if (!isUpcomingContest)
+                    const Icon(
+                      Icons.arrow_right_rounded,
+                      color: AppColor.primaryTextColor,
+                    )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

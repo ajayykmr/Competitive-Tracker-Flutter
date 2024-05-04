@@ -17,7 +17,12 @@ class LeaderBoardScreen extends ConsumerWidget {
         if (data==null) {
           return const Center(child: Text("No Data Received"),);
         } else {
-          return UsersListWidget(data);
+          return Column(
+            children: [
+              Text("Leaderboard", style: Theme.of(context).textTheme.bodyLarge),
+              Expanded(child: UsersListWidget(data)),
+            ],
+          );
         }
       },
     );
